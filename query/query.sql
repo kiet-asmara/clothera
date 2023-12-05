@@ -7,7 +7,7 @@ CREATE TABLE `Address` (
 
 CREATE TABLE `Customers` (
   `CustomerID` INT PRIMARY KEY AUTO_INCREMENT,
-  `AddressID` INT NOT NULL,
+`AddressID` INT NOT NULL,
   `CustomerName` VARCHAR(100) NOT NULL,
   `CustomerEmail` VARCHAR(100) UNIQUE NOT NULL,
   `CustomerPassword` BLOB NOT NULL,

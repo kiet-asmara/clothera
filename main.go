@@ -1,10 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
+	"os"
 	"pair-project/cli"
 	"pair-project/config"
+	"pair-project/entity"
+	"pair-project/handler"
 )
 
 func main() {
@@ -19,19 +23,23 @@ func main() {
 
 	for !exitMainMenu {
 		cli.ShowMainMenu()
-		fmt.Print("Choice: ")
-		fmt.Scan(&choiceMainMenu)
+		choiceMainMenu = cli.PromptChoice("Choice")
+
+		var customer *entity.Customer
+	RG_OK:
 
 		switch choiceMainMenu {
 		case 1:
-			CustomerType := ""
-			fmt.Print("Pilih Tipe Customer (Admin / Customer): ")
-			fmt.Scan(&CustomerType)
+
+			if nil == customer {
+				fmt.Println("customer is nil")
+				os.Exit(1)
+			}
 
 			exit2 := false
-			var choiceCustomer int
-			switch CustomerType {
-			case "Customer":
+			switch customer.CustomerType {
+			case entity.User:
+				var choiceCustomer int
 				for !exit2 {
 					cli.ShowCustomerMenu()
 					fmt.Print("Choice: ")
@@ -53,8 +61,9 @@ func main() {
 						fmt.Println("Invalid choice")
 					}
 				}
-			case "Admin":
+			case entity.Admin:
 				for !exit2 {
+					var choiceCustomer int
 					cli.ShowAdminMenu()
 					fmt.Print("Choice: ")
 					fmt.Scan(&choiceCustomer)
@@ -112,8 +121,24 @@ func main() {
 					}
 				}
 			}
+
 		case 2:
-			fmt.Println("Register")
+			var err error
+			customer, err = cli.Register(db)
+			if err != nil {
+				switch {
+				case errors.Is(err, handler.ErrorDuplicateEntry):
+					fmt.Println("User with this email already exists. Try login instead!")
+				default:
+					fmt.Println("Sorry We Have Problem in our server. Please Try Again!")
+				}
+				continue
+			}
+
+			fmt.Println("Register Success!")
+			choiceMainMenu = 1
+			goto RG_OK
+
 		case 3:
 			fmt.Println("Thank you for ordering")
 			exitMainMenu = true
