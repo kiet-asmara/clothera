@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"pair-project/entity"
 	"time"
 )
@@ -30,7 +31,12 @@ func GetCustomerByEmail(db *sql.DB, email string) (*entity.Customer, error) {
 		&customer.CustomerType,
 	)
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrorRecordNotFound
+		default:
+			return nil, err
+		}
 	}
 
 	customer.CustomerPassword = string(passwordHash)

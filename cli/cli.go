@@ -8,6 +8,8 @@ import (
 	"pair-project/pkg/validator"
 	"strconv"
 	"strings"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func ShowMainMenu() {
@@ -49,6 +51,7 @@ func PromptChoice(prompt string) int {
 	if err != nil {
 		return -1
 	}
+	fmt.Println()
 
 	input = strings.TrimSpace(input)
 
@@ -78,6 +81,26 @@ func Register(db *sql.DB) (*entity.Customer, error) {
 
 	customer.Address = *address
 	err = handler.InsertCustomer(db, customer)
+	if err != nil {
+		return nil, err
+	}
+
+	return customer, nil
+}
+
+func Login(db *sql.DB) (*entity.Customer, error) {
+	var customer = &entity.Customer{CustomerType: entity.User}
+	v := validator.New()
+
+	customer.CustomerEmail = inputEmail(v, "email")
+	customer.CustomerPassword = inputPassword(v, "password")
+
+	existingCustomer, err := handler.GetCustomerByEmail(db, customer.CustomerEmail)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(existingCustomer.CustomerPassword), []byte(customer.CustomerPassword))
 	if err != nil {
 		return nil, err
 	}

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"pair-project/cli"
 	"pair-project/config"
 	"pair-project/entity"
@@ -32,8 +31,12 @@ func main() {
 		case 1:
 
 			if nil == customer {
-				fmt.Println("customer is nil")
-				os.Exit(1)
+				customer, err = cli.Login(db)
+				if err != nil {
+					fmt.Printf("Sorry your crendential is not valid. Please try again!\n\n")
+					continue
+				}
+				fmt.Printf("Login Success\n\n")
 			}
 
 			exit2 := false
@@ -128,14 +131,14 @@ func main() {
 			if err != nil {
 				switch {
 				case errors.Is(err, handler.ErrorDuplicateEntry):
-					fmt.Println("User with this email already exists. Try login instead!")
+					fmt.Printf("User with this email already exists. Try login instead!\n\n")
 				default:
-					fmt.Println("Sorry We Have Problem in our server. Please Try Again!")
+					fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
 				}
 				continue
 			}
 
-			fmt.Println("Register Success!")
+			fmt.Printf("Register Success!\n\n")
 			choiceMainMenu = 1
 			goto RG_OK
 
