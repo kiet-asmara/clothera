@@ -3,8 +3,9 @@ CREATE TABlE Customers (
     CustomerName VARCHAR(100) NOT NULL,
     CustomerEmail VARCHAR(100) UNIQUE NOT NULL,
     CustomerPassword BLOB NOT NULL,
-    CustomerAddress VARCHAR(100) NOT NULL,
-    CustomerType ENUM ('Admin', 'Customer')
+    CustomerType ENUM ('Admin', 'Customer'),
+    AddressID INT NOT NULL,
+    FOREIGN KEY(AddressID) REFERENCES Address(AddressID)
 );
 
 CREATE TABLE Clothes (
@@ -19,7 +20,7 @@ CREATE TABLE Costumes (
     CostumeID INT PRIMARY KEY AUTO_INCREMENT,
     CostumeName VARCHAR(100) NOT NULL,
     CostumeCategory ENUM ('Cosplay', 'Formal') NOT NULL,
-    CostumerPrice DECIMAL(10,2)
+    CostumePrice DECIMAL(10,2) CHECK(CostumePrice > 0) NOT NULL
 );
 
 CREATE TABLE Orders (
@@ -33,7 +34,7 @@ CREATE TABLE Sales (
     SaleID INT PRIMARY KEY AUTO_INCREMENT,
     OrderID INT,
     ClothesID INT,
-    Quantity INT CHECK(Quantity > 0),
+    Quantity INT CHECK(Quantity > 0) NOT NULL,
     FOREIGN KEY(OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY(ClothesID) REFERENCES Clothes(ClothesID)
 );
@@ -42,11 +43,17 @@ CREATE TABLE Rents (
     RentID INT PRIMARY KEY AUTO_INCREMENT,
     OrderID INT,
     CostumeID INT,
-    Quantity INT CHECK(Quantity > 0),
-    StartDate DATE,
-    EndDate DATE,
+    Quantity INT CHECK(Quantity > 0) NOT NULL,
+    StartDate DATE NOT NULL,
+    EndDate DATE NOT NULL,
     FOREIGN KEY(OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY(CostumeID) REFERENCES Costumes(CostumeID)
 );
 
+CREATE TABLE Address (
+  AddressID INT PRIMARY KEY AUTO_INCREMENT,
+  AddressCountry VARCHAR(255) NOT NULL,
+  AddressCity VARCHAR(255) NOT NULL,
+  AddressStreet VARCHAR(255) NOT NULL
+);
 
