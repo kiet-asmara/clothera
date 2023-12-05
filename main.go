@@ -104,7 +104,6 @@ func main() {
 					}
 				}
 			}
-
 		case 2:
 			fmt.Println("Register")
 		case 3:
