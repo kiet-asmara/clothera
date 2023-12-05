@@ -2,10 +2,18 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"pair-project/cli"
+	"pair-project/config"
 )
 
 func main() {
+	db, err := config.GetDB("root:@tcp(127.0.0.1:3306)/clothera")
+	if err != nil {
+		log.Fatal("Failed to connect")
+	}
+	defer db.Close()
+
 	exitMainMenu := false
 	var choiceMainMenu int
 
