@@ -207,7 +207,19 @@ func main() {
 											fmt.Println("Product added successfully!")
 										}
 									case 2:
-										fmt.Println("Rents")
+										categories := handler.FetchAllCategoriesFromDatabaseCostumes(db)
+										fmt.Println("Available Categories:", categories)
+
+										selectedCategory := handler.GetSelectedCategoryFromUserCostumes(categories)
+
+										newProductCostumes := handler.GetProductDetailsFromAdminCostumes(selectedCategory)
+
+										err := handler.InsertProductIntoDatabaseCostumes(db, newProductCostumes)
+										if err != nil {
+											fmt.Println("Error adding product:", err)
+										} else {
+											fmt.Println("Product added successfully!")
+										}
 									case 3:
 										exit3 = true
 									default:
