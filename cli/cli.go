@@ -1,11 +1,9 @@
 package cli
 
 import (
-
 	"fmt"
 
 	"database/sql"
-	"fmt"
 	"pair-project/entity"
 	"pair-project/handler"
 	"pair-project/pkg/validator"
