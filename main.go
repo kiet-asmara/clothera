@@ -56,11 +56,19 @@ func main() {
 					case 2:
 						fmt.Println("Rental Pakaian")
 						// tampilkan kategori
+						kategori := handler.CategoryCostume()
 
 						// tampilkan list produk
+						err := handler.ListCostumes(db, kategori)
+						if err != nil {
+							log.Fatal(err)
+						}
 
 						// input: costumeid, quantity, enddate
 						price, err := handler.Rent(db, orderID)
+						if price == 0 {
+							continue // if out of stock
+						}
 						if err != nil {
 							log.Fatal(err)
 						}
@@ -70,6 +78,7 @@ func main() {
 					case 3:
 						fmt.Println("Pesanan")
 						// list barang pesanan
+						// barang dipesan, jumlah, subtotal
 
 						// hitung diskon & pajak
 						totalPrice = handler.CalcDiscount(totalPrice)
