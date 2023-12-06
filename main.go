@@ -238,9 +238,15 @@ func main() {
 
 									switch addProdukAdmin {
 									case 1:
-										fmt.Println("Clothes")
+										categories := handler.FetchAllCategoriesFromDatabase(db)
+										fmt.Println("Available Categories:", categories)
+										handler.ShowProductsByCategory(db)
+										handler.DeleteProduct(db)
 									case 2:
-										fmt.Println("Rents")
+										categories := handler.FetchAllCategoriesFromDatabaseCostumes(db)
+										fmt.Println("Available Categories:", categories)
+										handler.ShowProductsByCategoryCostumes(db)
+										handler.DeleteProductCostumes(db)
 									case 3:
 										exit3 = true
 									default:
