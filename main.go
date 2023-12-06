@@ -183,9 +183,58 @@ func main() {
 
 							switch productChoice {
 							case 1:
-								fmt.Println("Add Produk")
+								var addProdukAdmin int
+								exit3 := false
+
+								for !exit3 {
+									cli.ShowAdminAddProductMenu()
+									fmt.Print("Choice: ")
+									fmt.Scan(&addProdukAdmin)
+
+									switch addProdukAdmin {
+									case 1:
+										categories := handler.FetchAllCategoriesFromDatabase(db)
+										fmt.Println("Available Categories:", categories)
+
+										selectedCategory := handler.GetSelectedCategoryFromUser(categories)
+
+										newProductClothes := handler.GetProductDetailsFromAdmin(selectedCategory)
+
+										err := handler.InsertProductIntoDatabase(db, newProductClothes)
+										if err != nil {
+											fmt.Println("Error adding product:", err)
+										} else {
+											fmt.Println("Product added successfully!")
+										}
+									case 2:
+										fmt.Println("Rents")
+									case 3:
+										exit3 = true
+									default:
+										fmt.Println("Invalid choice")
+									}
+								}
+
 							case 2:
-								fmt.Println("Delete Produk")
+								var addProdukAdmin int
+								exit3 := false
+
+								for !exit3 {
+									cli.ShowAdminAddProductMenu()
+									fmt.Print("Choice: ")
+									fmt.Scan(&addProdukAdmin)
+
+									switch addProdukAdmin {
+									case 1:
+										fmt.Println("Clothes")
+									case 2:
+										fmt.Println("Rents")
+									case 3:
+										exit3 = true
+									default:
+										fmt.Println("Invalid choice")
+									}
+								}
 							case 3:
 								fmt.Println("Update Produk")
 							case 4:
