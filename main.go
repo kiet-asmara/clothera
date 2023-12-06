@@ -68,9 +68,15 @@ func main() {
 						fmt.Printf("\nYour total is now: $%.2f\n\n", totalPrice)
 					case 3:
 						fmt.Println("Pesanan")
-						// insert total price ke tabel orders
+						// list barang pesanan
 
-						// list beli & rental
+						// hitung diskon
+
+						// insert total price ke tabel orders
+						err := handler.InsertTotal(db, totalPrice, orderID)
+						if err != nil {
+							log.Fatal(err)
+						}
 
 					case 4:
 						fmt.Println("Edit Profil")

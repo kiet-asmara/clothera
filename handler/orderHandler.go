@@ -39,3 +39,18 @@ func CreateOrder(db *sql.DB, customerID int) (int, error) {
 
 	return orderID, nil
 }
+
+func InsertTotal(db *sql.DB, total float64, orderID int) error {
+	query := `UPDATE orders
+	SET TotalPrice = ?
+	WHERE OrderID = ?`
+
+	_, err := db.Exec(query, total, orderID)
+	if err != nil {
+		return fmt.Errorf("calculateTotal: %w", err)
+	}
+
+	fmt.Println("Updated price")
+
+	return nil
+}
