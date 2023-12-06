@@ -2,8 +2,8 @@ package entity
 
 type Rent struct {
 	RentID    int
-	OrderID   Order
-	Costume   Costume
+	OrderID   int
+	CostumeID int
 	Quantity  int
 	StartDate string
 	EndDate   string

@@ -1,10 +1,15 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
+	"os"
 	"pair-project/cli"
 	"pair-project/config"
+
+	"pair-project/entity"
+
 	"pair-project/handler"
 )
 
@@ -20,19 +25,38 @@ func main() {
 
 	for !exitMainMenu {
 		cli.ShowMainMenu()
-		fmt.Print("Choice: ")
-		fmt.Scan(&choiceMainMenu)
+		choiceMainMenu = cli.PromptChoice("Choice")
+
+		// user yang udah authenticated disimpan disini
+		var customer *entity.Customer
+	RG_OK:
 
 		switch choiceMainMenu {
 		case 1:
-			CustomerType := ""
-			fmt.Print("\nPilih Tipe Customer (Admin / Customer): ")
-			fmt.Scan(&CustomerType)
+
+			if nil == customer {
+				customer, err = cli.Login(db)
+				if err != nil {
+					fmt.Printf("Sorry your crendential is not valid. Please try again!\n\n")
+					continue
+				}
+				fmt.Printf("Login Success\n\n")
+			}
 
 			exit2 := false
+
 			var choiceCustomer int
-			switch CustomerType {
-			case "Customer":
+			switch customer.CustomerType {
+			case entity.User:
+				// create order
+				orderID, err := handler.CreateOrder(db, 2)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				// create total price
+				var totalPrice float64
+
 				for !exit2 {
 					cli.ShowCustomerMenu()
 					fmt.Print("Choice: ")
@@ -77,8 +101,33 @@ func main() {
 
 					case 2:
 						fmt.Println("Rental Pakaian")
+						// tampilkan kategori
+
+						// tampilkan list produk
+
+						// input: costumeid, quantity, enddate
+						price, err := handler.Rent(db, orderID)
+						if err != nil {
+							log.Fatal(err)
+						}
+						fmt.Println("price:", price)
+						totalPrice += price
+						fmt.Printf("\nYour total is now: $%.2f\n\n", totalPrice)
 					case 3:
 						fmt.Println("Pesanan")
+						// list barang pesanan
+
+						// hitung diskon & pajak
+						totalPrice = handler.CalcDiscount(totalPrice)
+						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n", totalPrice)
+
+						// insert total price ke tabel orders
+						err := handler.InsertTotal(db, totalPrice, orderID)
+						if err != nil {
+							log.Fatal(err)
+						}
+						os.Exit(1)
+
 					case 4:
 						fmt.Println("Edit Profil")
 					case 5:
@@ -88,7 +137,7 @@ func main() {
 						fmt.Println("Invalid choice")
 					}
 				}
-			case "Admin":
+			case entity.Admin:
 				for !exit2 {
 					cli.ShowAdminMenu()
 					fmt.Print("Choice: ")
@@ -148,7 +197,21 @@ func main() {
 				}
 			}
 		case 2:
-			fmt.Println("Register")
+			var err error
+			customer, err = cli.Register(db)
+			if err != nil {
+				switch {
+				case errors.Is(err, handler.ErrorDuplicateEntry):
+					fmt.Printf("User with this email already exists. Try login instead!\n\n")
+				default:
+					fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+				}
+				continue
+			}
+
+			fmt.Printf("Register Success!\n\n")
+			choiceMainMenu = 1
+			goto RG_OK
 		case 3:
 			fmt.Println("Thank you for ordering")
 			exitMainMenu = true
