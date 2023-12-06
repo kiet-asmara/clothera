@@ -41,7 +41,7 @@ func InsertCustomer(db *sql.DB, param *entity.Customer) error {
 		return fmt.Errorf("error getting id from result: %v", err)
 	}
 
-	param.CustomerPassword = ""
 	param.CustomerID = int(id)
+	param.CustomerPassword = string(passwordHash)
 	return nil
 }

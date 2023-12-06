@@ -55,8 +55,36 @@ func main() {
 						fmt.Println("Rental Pakaian")
 					case 3:
 						fmt.Println("Pesanan")
+
+					// Update Profile
 					case 4:
-						fmt.Println("Edit Profil")
+						var exit bool
+						for !exit {
+							cli.ShowProfileMenu()
+							choice := cli.PromptChoice("Choice")
+
+							switch choice {
+							case 1:
+								err := cli.ShowProfile(db, customer)
+								if err != nil {
+									fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+								}
+
+							case 2:
+								updatedCustomer, err := cli.UpdateProfile(db, customer)
+								if err != nil {
+									fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+									continue
+								}
+								customer = updatedCustomer
+								fmt.Printf("Profile updated sucessfully!\n\n")
+
+							case 3:
+								exit = true
+							default:
+								fmt.Println("Invalid choice")
+							}
+						}
 					case 5:
 						fmt.Println("Back to Main Menu")
 						exit2 = true
