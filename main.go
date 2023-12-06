@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"pair-project/cli"
 	"pair-project/config"
 	"pair-project/entity"
@@ -40,9 +41,19 @@ func main() {
 			}
 
 			exit2 := false
+
 			var choiceCustomer int
 			switch customer.CustomerType {
 			case entity.User:
+				// create order
+				orderID, err := handler.CreateOrder(db, 2)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				// create total price
+				var totalPrice float64
+
 				for !exit2 {
 					cli.ShowCustomerMenu()
 					fmt.Print("Choice: ")
@@ -87,8 +98,33 @@ func main() {
 
 					case 2:
 						fmt.Println("Rental Pakaian")
+						// tampilkan kategori
+
+						// tampilkan list produk
+
+						// input: costumeid, quantity, enddate
+						price, err := handler.Rent(db, orderID)
+						if err != nil {
+							log.Fatal(err)
+						}
+						fmt.Println("price:", price)
+						totalPrice += price
+						fmt.Printf("\nYour total is now: $%.2f\n\n", totalPrice)
 					case 3:
 						fmt.Println("Pesanan")
+						// list barang pesanan
+
+						// hitung diskon & pajak
+						totalPrice = handler.CalcDiscount(totalPrice)
+						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n", totalPrice)
+
+						// insert total price ke tabel orders
+						err := handler.InsertTotal(db, totalPrice, orderID)
+						if err != nil {
+							log.Fatal(err)
+						}
+						os.Exit(1)
+
 					case 4:
 						fmt.Println("Edit Profil")
 					case 5:
