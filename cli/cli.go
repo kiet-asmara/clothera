@@ -1,6 +1,8 @@
 package cli
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func ShowMainMenu() {
 	fmt.Println("1 -> Login")
@@ -9,7 +11,7 @@ func ShowMainMenu() {
 }
 
 func ShowCustomerMenu() {
-	fmt.Println("1 -> Beli")
+	fmt.Println("\n1 -> Beli")
 	fmt.Println("2 -> Rental Pakaian")
 	fmt.Println("3 -> Pesanan")
 	fmt.Println("4 -> Edit Profil")

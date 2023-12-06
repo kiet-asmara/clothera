@@ -5,6 +5,7 @@ import (
 	"log"
 	"pair-project/cli"
 	"pair-project/config"
+	"pair-project/handler"
 )
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 		switch choiceMainMenu {
 		case 1:
 			CustomerType := ""
-			fmt.Print("Pilih Tipe Customer (Admin / Customer): ")
+			fmt.Print("\nPilih Tipe Customer (Admin / Customer): ")
 			fmt.Scan(&CustomerType)
 
 			exit2 := false
@@ -39,7 +40,41 @@ func main() {
 
 					switch choiceCustomer {
 					case 1:
-						fmt.Println("Beli")
+						handler.ListCategory(db)
+						exit3 := false
+						var choiceCategory int
+						for !exit3 {
+							fmt.Print("Silahkan pilih kategori (0 untuk kembali): ")
+							fmt.Scan(&choiceCategory)
+
+							if choiceCategory < 0 || choiceCategory > len(handler.Categories) {
+								fmt.Println("Pilihan tidak valid. Silakan pilih lagi.")
+								continue
+							} else if choiceCategory == 0 {
+								exit3 = true
+							} else {
+								exit4 := false
+								var choiceProdukID int
+
+								for !exit4 {
+									handler.DisplayClothesByCategory(db, handler.Categories[choiceCategory-1])
+									fmt.Print("Silahkan pilih barang yang ingin dibeli (0 untuk kembali): ")
+									fmt.Scan(&choiceProdukID)
+
+									if choiceProdukID < 0 || choiceProdukID > len(handler.Categories) {
+										fmt.Println("Pilihan tidak valid. Silakan pilih lagi.")
+										continue
+									} else if choiceProdukID == 0 {
+										exit4 = true
+										handler.ListCategory(db)
+									} else {
+										// function getClothes
+									}
+								}
+							}
+
+						}
+
 					case 2:
 						fmt.Println("Rental Pakaian")
 					case 3:
