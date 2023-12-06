@@ -25,7 +25,6 @@ func main() {
 		cli.ShowMainMenu()
 		choiceMainMenu = cli.PromptChoice("Choice")
 
-
 		// user yang udah authenticated disimpan disini
 		var customer *entity.Customer
 	RG_OK:
@@ -163,7 +162,7 @@ func main() {
 						}
 						os.Exit(1)
 
-          // Update Profile
+					// Update Profile
 					case 4:
 						var exit bool
 						for !exit {
@@ -182,6 +181,7 @@ func main() {
 								updatedCustomer, err := cli.UpdateProfile(db, customer)
 								if err != nil {
 									fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+									fmt.Println(err)
 									continue
 								}
 								customer = updatedCustomer
@@ -274,6 +274,7 @@ func main() {
 			var err error
 			customer, err = cli.Register(db)
 			if err != nil {
+				fmt.Println(err)
 				switch {
 				case errors.Is(err, handler.ErrorDuplicateEntry):
 					fmt.Printf("User with this email already exists. Try login instead!\n\n")

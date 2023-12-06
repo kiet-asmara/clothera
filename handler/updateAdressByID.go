@@ -10,13 +10,13 @@ import (
 
 func UpdateAdressByID(db *sql.DB, address *entity.Address) error {
 	query := `
-		UPDATE Address
+		UPDATE address
 		SET 
 			AddressCountry = ?,
 			AddressCity = ?,
 			AddressStreet = ?
 		WHERE 
-			AddressID = ?
+			addressID = ?
 	`
 
 	args := []any{address.AddressCountry, address.AddressCity, address.AddressStreet, address.AddressID}

@@ -22,7 +22,7 @@ func UpdateCustomerByID(db *sql.DB, customer *entity.Customer, isUpdatePassword 
 	}
 
 	query := `
-		UPDATE Customers
+		UPDATE customers
 		SET 
 			CustomerName = ?,
 			CustomerEmail = ?,

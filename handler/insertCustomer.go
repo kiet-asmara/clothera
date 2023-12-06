@@ -13,7 +13,7 @@ import (
 
 func InsertCustomer(db *sql.DB, param *entity.Customer) error {
 	query := `
-		INSERT INTO Customers(AddressID, CustomerName, CustomerEmail, CustomerPassword, CustomerType)
+		INSERT INTO customers(AddressID, CustomerName, CustomerEmail, CustomerPassword, CustomerType)
 		VALUES (?, ?, ?, ?, ?)
 	`
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(param.CustomerPassword), bcrypt.DefaultCost)

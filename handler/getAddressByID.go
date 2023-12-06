@@ -11,7 +11,7 @@ import (
 func GetAddressByID(db *sql.DB, inputID int) (*entity.Address, error) {
 	query := `
 	SELECT AddressID, AddressCountry, AddressCity, AddressStreet
-	FROM Address
+	FROM address
 	WHERE AddressID = ?
 	LIMIT 1
 `
