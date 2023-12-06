@@ -127,7 +127,6 @@ func ShowProfile(db *sql.DB, customer *entity.Customer) error {
 			return err
 		}
 	}
-	customer.CustomerPassword = ""
 
 	address, err := handler.GetAddressByID(db, customer.Address.AddressID)
 	if err != nil {
@@ -163,7 +162,6 @@ func ShowProfile(db *sql.DB, customer *entity.Customer) error {
 func UpdateProfile(db *sql.DB, customer *entity.Customer) (*entity.Customer, error) {
 	var newcustomer = &entity.Customer{
 		CustomerID:       customer.CustomerID,
-		CustomerType:     customer.CustomerType,
 		CustomerEmail:    customer.CustomerEmail,
 		CustomerName:     customer.CustomerName,
 		CustomerPassword: customer.CustomerPassword,
@@ -188,7 +186,8 @@ func UpdateProfile(db *sql.DB, customer *entity.Customer) (*entity.Customer, err
 		break
 	}
 
-	newname := inputUpdateUsername(v, "\nNew name")
+	fmt.Println("\ntype '-' for skip!")
+	newname := inputUpdateUsername(v, "New name")
 	newemail := inputUpdateEmail(v, "New email")
 	newpassword := inputUpdatePassword(v, "New password")
 	newcountry := inputUpdateCountry(v, "New country")
@@ -228,8 +227,9 @@ func UpdateProfile(db *sql.DB, customer *entity.Customer) (*entity.Customer, err
 			return customer, err
 		}
 	}
+	customer.Address = newcustomer.Address
 
-	err = handler.UpdateCustomerByID(db, newcustomer)
+	err = handler.UpdateCustomerByID(db, newcustomer, newcustomer.CustomerPassword != customer.CustomerPassword)
 	if err != nil {
 		switch {
 		case errors.Is(err, handler.ErrorRecordNotFound):
@@ -238,6 +238,9 @@ func UpdateProfile(db *sql.DB, customer *entity.Customer) (*entity.Customer, err
 			return customer, err
 		}
 	}
+	customer.CustomerName = newcustomer.CustomerName
+	customer.CustomerEmail = newcustomer.CustomerEmail
+	customer.CustomerPassword = newcustomer.CustomerPassword
 
-	return newcustomer, nil
+	return customer, nil
 }

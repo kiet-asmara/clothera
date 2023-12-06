@@ -10,10 +10,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func UpdateCustomerByID(db *sql.DB, customer *entity.Customer) error {
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(customer.CustomerPassword), bcrypt.DefaultCost)
-	if err != nil {
-		return err
+func UpdateCustomerByID(db *sql.DB, customer *entity.Customer, isUpdatePassword bool) error {
+	var passwordhash = []byte(customer.CustomerPassword)
+
+	var err error
+	if isUpdatePassword {
+		passwordhash, err = bcrypt.GenerateFromPassword([]byte(passwordhash), bcrypt.DefaultCost)
+		if err != nil {
+			return err
+		}
 	}
 
 	query := `
@@ -25,7 +30,7 @@ func UpdateCustomerByID(db *sql.DB, customer *entity.Customer) error {
 		WHERE CustomerID = ?
 	`
 
-	args := []any{customer.CustomerName, customer.CustomerEmail, passwordHash, customer.CustomerID}
+	args := []any{customer.CustomerName, customer.CustomerEmail, passwordhash, customer.CustomerID}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -40,6 +45,6 @@ func UpdateCustomerByID(db *sql.DB, customer *entity.Customer) error {
 		}
 	}
 
-	customer.CustomerPassword = string(passwordHash)
+	customer.CustomerPassword = string(passwordhash)
 	return nil
 }

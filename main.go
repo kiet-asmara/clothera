@@ -60,6 +60,7 @@ func main() {
 					case 4:
 						var exit bool
 						for !exit {
+
 							cli.ShowProfileMenu()
 							choice := cli.PromptChoice("Choice")
 
