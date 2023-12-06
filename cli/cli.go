@@ -1,12 +1,16 @@
 package cli
 
 import (
-	"database/sql"
+
 	"errors"
+	"pair-project/pkg/table"
+
 	"fmt"
+
+	"database/sql"
 	"pair-project/entity"
 	"pair-project/handler"
-	"pair-project/pkg/table"
+
 	"pair-project/pkg/validator"
 	"strconv"
 	"strings"
@@ -21,7 +25,7 @@ func ShowMainMenu() {
 }
 
 func ShowCustomerMenu() {
-	fmt.Println("1 -> Beli")
+	fmt.Println("\n1 -> Beli")
 	fmt.Println("2 -> Rental Pakaian")
 	fmt.Println("3 -> Pesanan")
 	fmt.Println("4 -> Profile")
@@ -48,11 +52,13 @@ func ShowAdminReportMenu() {
 	fmt.Println("4 -> Back\n")
 }
 
+
 func ShowProfileMenu() {
 	fmt.Println("1 -> Show Profile")
 	fmt.Println("2 -> Edit Profile")
 	fmt.Println("3 -> Back\n")
 }
+
 
 func PromptChoice(prompt string) int {
 	input, err := promptline(prompt)
@@ -114,6 +120,7 @@ func Login(db *sql.DB) (*entity.Customer, error) {
 
 	return existingCustomer, nil
 }
+
 
 func ShowProfile(db *sql.DB, customer *entity.Customer) error {
 	var err error
@@ -244,3 +251,4 @@ func UpdateProfile(db *sql.DB, customer *entity.Customer) (*entity.Customer, err
 
 	return customer, nil
 }
+

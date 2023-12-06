@@ -34,9 +34,11 @@ func promptline(prompt string) (string, error) {
 	return scanner.Text(), nil
 }
 
+
 /* ---------------------------------------------------------------- */
 /*                            input auth                            */
 /* ---------------------------------------------------------------- */
+
 
 func inputUsername(v *validator.Validator, prompt string) string {
 	for {
@@ -135,6 +137,7 @@ func inputStreet(v *validator.Validator, prompt string) string {
 		}
 	}
 }
+
 
 /* ---------------------------------------------------------------- */
 /*                           input update                           */
@@ -261,3 +264,4 @@ func inputUpdateStreet(v *validator.Validator, prompt string) string {
 		}
 	}
 }
+

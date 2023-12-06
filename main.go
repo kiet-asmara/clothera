@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"pair-project/cli"
 	"pair-project/config"
 	"pair-project/entity"
@@ -24,6 +25,8 @@ func main() {
 		cli.ShowMainMenu()
 		choiceMainMenu = cli.PromptChoice("Choice")
 
+
+		// user yang udah authenticated disimpan disini
 		var customer *entity.Customer
 	RG_OK:
 
@@ -40,9 +43,19 @@ func main() {
 			}
 
 			exit2 := false
+
+			var choiceCustomer int
 			switch customer.CustomerType {
 			case entity.User:
-				var choiceCustomer int
+				// create order
+				orderID, err := handler.CreateOrder(db, customer.CustomerID)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				// create total price
+				var totalPrice float64
+
 				for !exit2 {
 					cli.ShowCustomerMenu()
 					fmt.Print("Choice: ")
@@ -50,13 +63,107 @@ func main() {
 
 					switch choiceCustomer {
 					case 1:
-						fmt.Println("Beli")
+						handler.ListCategory(db)
+						exit3 := false
+						var choiceCategory int
+						for !exit3 {
+							fmt.Print("Silahkan pilih kategori (0 untuk kembali): ")
+							fmt.Scan(&choiceCategory)
+
+							if choiceCategory < 0 || choiceCategory > len(handler.Categories) {
+								fmt.Println("Pilihan tidak valid. Silakan pilih lagi.")
+								continue
+							} else if choiceCategory == 0 {
+								exit3 = true
+							} else {
+								exit4 := false
+								var choiceProdukID int
+
+								for !exit4 {
+									temp := handler.DisplayClothesByCategory(db, handler.Categories[choiceCategory-1])
+									fmt.Print("Silahkan pilih barang yang ingin dibeli (0 untuk kembali): ")
+									fmt.Scan(&choiceProdukID)
+
+									var temp1 int
+									if choiceProdukID != 0 {
+										temp1, err = handler.ByName(db, temp[choiceProdukID-1])
+										if err != nil {
+											panic("Error getting clothes by name!")
+										}
+									}
+
+									if choiceProdukID < 0 || choiceProdukID > len(handler.Categories) {
+										fmt.Println("Pilihan tidak valid. Silakan pilih lagi.")
+										continue
+									} else if choiceProdukID == 0 {
+										exit4 = true
+										handler.ListCategory(db)
+									} else {
+										selectedClothes, err := handler.GetClothesByID(db, temp1)
+										if err != nil {
+											log.Fatal(err)
+										}
+										price, err := handler.GetPriceClothes(db, selectedClothes.ClothesID)
+										if err != nil {
+											log.Fatal(err)
+										}
+
+										fmt.Print("Enter the quantity: ")
+										var quantity int
+										fmt.Scan(&quantity)
+
+										err = handler.AddClothes(db, *selectedClothes, *customer, orderID, quantity)
+										if err != nil {
+											log.Fatal(err)
+										}
+
+										totalPrice += price * float64(quantity)
+										fmt.Printf("Added %d %s to your order.\n", quantity, selectedClothes.ClothesName)
+										fmt.Printf("Total price: %.2f.\n", totalPrice)
+									}
+								}
+							}
+
+						}
+
 					case 2:
 						fmt.Println("Rental Pakaian")
+						// tampilkan kategori
+						kategori := handler.CategoryCostume()
+
+						// tampilkan list produk
+						err := handler.ListCostumes(db, kategori)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						// input: costumeid, quantity, enddate
+						price, err := handler.Rent(db, orderID)
+						if price == 0 {
+							continue // if out of stock
+						}
+						if err != nil {
+							log.Fatal(err)
+						}
+						fmt.Println("price:", price)
+						totalPrice += price
+						fmt.Printf("\nYour total is now: $%.2f\n\n", totalPrice)
 					case 3:
 						fmt.Println("Pesanan")
+						// list barang pesanan
 
-					// Update Profile
+						// hitung diskon & pajak
+						totalPrice = handler.CalcDiscount(totalPrice)
+						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n", totalPrice)
+
+						// insert total price ke tabel orders
+						err := handler.InsertTotal(db, totalPrice, orderID)
+						if err != nil {
+							log.Fatal(err)
+						}
+						os.Exit(1)
+
+          // Update Profile
 					case 4:
 						var exit bool
 						for !exit {
@@ -137,6 +244,15 @@ func main() {
 								fmt.Println("User Report")
 							case 2:
 								fmt.Println("Order Report")
+								err := handler.TotalQuantity(db)
+								if err != nil {
+									log.Fatal(err)
+								}
+
+								err = handler.RentalRevenueByCostume(db)
+								if err != nil {
+									log.Fatal(err)
+								}
 							case 3:
 								fmt.Println("Stock Report")
 							case 4:

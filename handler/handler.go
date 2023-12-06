@@ -7,3 +7,4 @@ var (
 	ErrorDuplicateEntry = fmt.Errorf("duplicate entry")
 	ErrorRecordNotFound = fmt.Errorf("record not found")
 )
+
