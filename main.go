@@ -104,6 +104,10 @@ func main() {
 										if err != nil {
 											log.Fatal(err)
 										}
+										price, err := handler.GetPriceClothes(db, selectedClothes.ClothesID)
+										if err != nil {
+											log.Fatal(err)
+										}
 
 										fmt.Print("Enter the quantity: ")
 										var quantity int
@@ -114,7 +118,9 @@ func main() {
 											log.Fatal(err)
 										}
 
+										totalPrice += price * float64(quantity)
 										fmt.Printf("Added %d %s to your order.\n", quantity, selectedClothes.ClothesName)
+										fmt.Printf("Total price: %.2f.\n", totalPrice)
 									}
 								}
 							}

@@ -96,3 +96,16 @@ func ByName(db *sql.DB, clothesName string) (int, error) {
 
 	return clothesID, nil
 }
+
+func GetPriceClothes(db *sql.DB, clothesID int) (float64, error) {
+	query := `SELECT ClothesPrice FROM Clothes WHERE ClothesID = ?`
+
+	var clothesPrice float64
+	err := db.QueryRow(query, clothesID).Scan(&clothesPrice)
+
+	if err != nil {
+		return -1, err
+	}
+
+	return clothesPrice, nil
+}
