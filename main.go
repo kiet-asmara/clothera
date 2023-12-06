@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"pair-project/cli"
 	"pair-project/config"
 	"pair-project/handler"
@@ -70,13 +71,16 @@ func main() {
 						fmt.Println("Pesanan")
 						// list barang pesanan
 
-						// hitung diskon
+						// hitung diskon & pajak
+						totalPrice = handler.CalcDiscount(totalPrice)
+						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n", totalPrice)
 
 						// insert total price ke tabel orders
 						err := handler.InsertTotal(db, totalPrice, orderID)
 						if err != nil {
 							log.Fatal(err)
 						}
+						os.Exit(1)
 
 					case 4:
 						fmt.Println("Edit Profil")

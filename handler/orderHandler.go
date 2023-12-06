@@ -40,6 +40,25 @@ func CreateOrder(db *sql.DB, customerID int) (int, error) {
 	return orderID, nil
 }
 
+func CalcDiscount(totalPrice float64) float64 {
+
+	// calculate discount
+	if totalPrice > 500 {
+		// diskon 20%
+		fmt.Println("Congrats! You qualify for a 20% discount.")
+		totalPrice *= 0.8
+	} else if totalPrice > 200 {
+		// diskon 10%
+		fmt.Println("Congrats! You qualify for a 10% discount.")
+		totalPrice *= 0.9
+	}
+
+	// calculate taxes (PPn = 11%)
+	totalPrice *= 1.11
+
+	return totalPrice
+}
+
 func InsertTotal(db *sql.DB, total float64, orderID int) error {
 	query := `UPDATE orders
 	SET TotalPrice = ?
