@@ -188,6 +188,10 @@ func main() {
 								fmt.Println("User Report")
 							case 2:
 								fmt.Println("Order Report")
+								err := handler.TotalQuantity(db)
+								if err != nil {
+									log.Fatal(err)
+								}
 							case 3:
 								fmt.Println("Stock Report")
 							case 4:
