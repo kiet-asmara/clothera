@@ -192,6 +192,11 @@ func main() {
 								if err != nil {
 									log.Fatal(err)
 								}
+
+								err = handler.RentalRevenueByCostume(db)
+								if err != nil {
+									log.Fatal(err)
+								}
 							case 3:
 								fmt.Println("Stock Report")
 							case 4:
