@@ -49,7 +49,7 @@ func main() {
 			switch customer.CustomerType {
 			case entity.User:
 				// create order
-				orderID, err := handler.CreateOrder(db, 2)
+				orderID, err := handler.CreateOrder(db, customer.CustomerID)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -102,11 +102,19 @@ func main() {
 					case 2:
 						fmt.Println("Rental Pakaian")
 						// tampilkan kategori
+						kategori := handler.CategoryCostume()
 
 						// tampilkan list produk
+						err := handler.ListCostumes(db, kategori)
+						if err != nil {
+							log.Fatal(err)
+						}
 
 						// input: costumeid, quantity, enddate
 						price, err := handler.Rent(db, orderID)
+						if price == 0 {
+							continue // if out of stock
+						}
 						if err != nil {
 							log.Fatal(err)
 						}
@@ -180,6 +188,15 @@ func main() {
 								fmt.Println("User Report")
 							case 2:
 								fmt.Println("Order Report")
+								err := handler.TotalQuantity(db)
+								if err != nil {
+									log.Fatal(err)
+								}
+
+								err = handler.RentalRevenueByCostume(db)
+								if err != nil {
+									log.Fatal(err)
+								}
 							case 3:
 								fmt.Println("Stock Report")
 							case 4:
