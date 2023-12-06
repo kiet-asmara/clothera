@@ -7,7 +7,9 @@ import (
 	"os"
 	"pair-project/cli"
 	"pair-project/config"
+
 	"pair-project/entity"
+
 	"pair-project/handler"
 )
 
@@ -31,6 +33,7 @@ func main() {
 
 		switch choiceMainMenu {
 		case 1:
+
 			if nil == customer {
 				customer, err = cli.Login(db)
 				if err != nil {

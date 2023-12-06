@@ -1,6 +1,9 @@
 package cli
 
 import (
+
+	"fmt"
+
 	"database/sql"
 	"fmt"
 	"pair-project/entity"

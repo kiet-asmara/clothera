@@ -6,6 +6,7 @@ import (
 )
 
 func AddProduct(db *sql.DB, clothes entity.Clothes, customer entity.Customer, order entity.Order, sale entity.Sale) error {
+
 	// Add the customer to the customers table
 	customerQuery := `
 		INSERT INTO customers (AddressID, CustomerName, CustomerEmail, CustomerPassword, CustomerType)
@@ -25,11 +26,13 @@ func AddProduct(db *sql.DB, clothes entity.Clothes, customer entity.Customer, or
 		return err
 	}
 
+
 	// Get the last inserted customer ID
 	customerID, err := result.LastInsertId()
 	if err != nil {
 		return err
 	}
+
 
 	// Add the order to the orders table
 	orderQuery := `
@@ -42,11 +45,13 @@ func AddProduct(db *sql.DB, clothes entity.Clothes, customer entity.Customer, or
 		return err
 	}
 
+
 	// Get the last inserted order ID
 	orderID, err := result.LastInsertId()
 	if err != nil {
 		return err
 	}
+
 
 	// Add the clothes to the clothes table
 	clothesQuery := `
@@ -65,6 +70,7 @@ func AddProduct(db *sql.DB, clothes entity.Clothes, customer entity.Customer, or
 	if err != nil {
 		return err
 	}
+
 
 	// Get the last inserted clothes ID
 	clothesID, err := result.LastInsertId()
