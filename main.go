@@ -49,7 +49,7 @@ func main() {
 			switch customer.CustomerType {
 			case entity.User:
 				// create order
-				orderID, err := handler.CreateOrder(db, 2)
+				orderID, err := handler.CreateOrder(db, customer.CustomerID)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -81,9 +81,17 @@ func main() {
 								var choiceProdukID int
 
 								for !exit4 {
-									handler.DisplayClothesByCategory(db, handler.Categories[choiceCategory-1])
+									temp := handler.DisplayClothesByCategory(db, handler.Categories[choiceCategory-1])
 									fmt.Print("Silahkan pilih barang yang ingin dibeli (0 untuk kembali): ")
 									fmt.Scan(&choiceProdukID)
+
+									var temp1 int
+									if choiceProdukID != 0 {
+										temp1, err = handler.ByName(db, temp[choiceProdukID-1])
+										if err != nil {
+											panic("Error getting clothes by name!")
+										}
+									}
 
 									if choiceProdukID < 0 || choiceProdukID > len(handler.Categories) {
 										fmt.Println("Pilihan tidak valid. Silakan pilih lagi.")
@@ -92,7 +100,21 @@ func main() {
 										exit4 = true
 										handler.ListCategory(db)
 									} else {
-										// function getClothes
+										selectedClothes, err := handler.GetClothesByID(db, temp1)
+										if err != nil {
+											log.Fatal(err)
+										}
+
+										fmt.Print("Enter the quantity: ")
+										var quantity int
+										fmt.Scan(&quantity)
+
+										err = handler.AddClothes(db, *selectedClothes, *customer, orderID, quantity)
+										if err != nil {
+											log.Fatal(err)
+										}
+
+										fmt.Printf("Added %d %s to your order.\n", quantity, selectedClothes.ClothesName)
 									}
 								}
 							}

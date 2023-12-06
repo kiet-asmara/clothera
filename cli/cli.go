@@ -105,5 +105,5 @@ func Login(db *sql.DB) (*entity.Customer, error) {
 		return nil, err
 	}
 
-	return customer, nil
+	return existingCustomer, nil
 }

@@ -1,5 +1,3 @@
-// handler.go
-
 package handler
 
 import (
@@ -42,33 +40,37 @@ func ListCategory(db *sql.DB) {
 	}
 }
 
-func DisplayClothesByCategory(db *sql.DB, selectedCategory string) {
+func DisplayClothesByCategory(db *sql.DB, selectedCategory string) []string {
 	query := "SELECT ClothesName FROM Clothes WHERE ClothesCategory = ?"
 	rows, err := db.Query(query, selectedCategory)
 	if err != nil {
 		fmt.Println("Error querying the database:", err)
-		return
+		return nil
 	}
 	defer rows.Close()
 
-	var clothesName string
+	var result []string
 
 	fmt.Printf("\n---Clothes in Category '%s'---\n", selectedCategory)
 	num := 1
 	for rows.Next() {
+		var clothesName string
 		err := rows.Scan(&clothesName)
 		if err != nil {
 			fmt.Println("Error scanning row:", err)
-			return
+			return nil
 		}
 		fmt.Printf("%d. %s\n", num, clothesName)
 		num++
+		result = append(result, clothesName)
 	}
 
 	fmt.Println()
 
 	if err := rows.Err(); err != nil {
 		fmt.Println("Error iterating over rows:", err)
-		return
+		return nil
 	}
+
+	return result
 }
