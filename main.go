@@ -7,9 +7,7 @@ import (
 	"os"
 	"pair-project/cli"
 	"pair-project/config"
-
 	"pair-project/entity"
-
 	"pair-project/handler"
 )
 
@@ -164,8 +162,37 @@ func main() {
 						}
 						os.Exit(1)
 
+					// Update Profile
 					case 4:
-						fmt.Println("Edit Profil")
+						var exit bool
+						for !exit {
+
+							cli.ShowProfileMenu()
+							choice := cli.PromptChoice("Choice")
+
+							switch choice {
+							case 1:
+								err := cli.ShowProfile(db, customer)
+								if err != nil {
+									fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+								}
+
+							case 2:
+								updatedCustomer, err := cli.UpdateProfile(db, customer)
+								if err != nil {
+									fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+									fmt.Println(err)
+									continue
+								}
+								customer = updatedCustomer
+								fmt.Printf("Profile updated sucessfully!\n\n")
+
+							case 3:
+								exit = true
+							default:
+								fmt.Println("Invalid choice")
+							}
+						}
 					case 5:
 						fmt.Println("Back to Main Menu")
 						exit2 = true
@@ -175,6 +202,7 @@ func main() {
 				}
 			case entity.Admin:
 				for !exit2 {
+					var choiceCustomer int
 					cli.ShowAdminMenu()
 					fmt.Print("Choice: ")
 					fmt.Scan(&choiceCustomer)
@@ -241,10 +269,12 @@ func main() {
 					}
 				}
 			}
+
 		case 2:
 			var err error
 			customer, err = cli.Register(db)
 			if err != nil {
+				fmt.Println(err)
 				switch {
 				case errors.Is(err, handler.ErrorDuplicateEntry):
 					fmt.Printf("User with this email already exists. Try login instead!\n\n")
@@ -257,6 +287,7 @@ func main() {
 			fmt.Printf("Register Success!\n\n")
 			choiceMainMenu = 1
 			goto RG_OK
+
 		case 3:
 			fmt.Println("Thank you for ordering")
 			exitMainMenu = true

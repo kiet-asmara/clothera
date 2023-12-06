@@ -1,11 +1,16 @@
 package cli
 
 import (
+
+	"errors"
+	"pair-project/pkg/table"
+
 	"fmt"
 
 	"database/sql"
 	"pair-project/entity"
 	"pair-project/handler"
+
 	"pair-project/pkg/validator"
 	"strconv"
 	"strings"
@@ -23,7 +28,7 @@ func ShowCustomerMenu() {
 	fmt.Println("\n1 -> Beli")
 	fmt.Println("2 -> Rental Pakaian")
 	fmt.Println("3 -> Pesanan")
-	fmt.Println("4 -> Edit Profil")
+	fmt.Println("4 -> Profile")
 	fmt.Println("5 -> Back to Main Menu\n")
 }
 
@@ -46,6 +51,14 @@ func ShowAdminReportMenu() {
 	fmt.Println("3 -> Stock Report")
 	fmt.Println("4 -> Back\n")
 }
+
+
+func ShowProfileMenu() {
+	fmt.Println("1 -> Show Profile")
+	fmt.Println("2 -> Edit Profile")
+	fmt.Println("3 -> Back\n")
+}
+
 
 func PromptChoice(prompt string) int {
 	input, err := promptline(prompt)
@@ -107,3 +120,135 @@ func Login(db *sql.DB) (*entity.Customer, error) {
 
 	return existingCustomer, nil
 }
+
+
+func ShowProfile(db *sql.DB, customer *entity.Customer) error {
+	var err error
+
+	customer, err = handler.GetCustomerByEmail(db, customer.CustomerEmail)
+	if err != nil {
+		switch {
+		case errors.Is(err, handler.ErrorRecordNotFound):
+			panic("Error: invalid system error") // at this point user should exists
+		default:
+			return err
+		}
+	}
+
+	address, err := handler.GetAddressByID(db, customer.Address.AddressID)
+	if err != nil {
+		switch {
+		case errors.Is(err, handler.ErrorRecordNotFound):
+			panic("Error: invalid system error") // at this point address should exists
+		default:
+			return err
+		}
+	}
+
+	customer.Address.AddressCountry = address.AddressCountry
+	customer.Address.AddressCity = address.AddressCity
+	customer.Address.AddressStreet = address.AddressStreet
+
+	table.Render(table.RenderParam{
+		Title:      "User Profile",
+		TitleAlign: table.AlignCenter,
+		Header:     []string{"ID", "Name", "Email", "Country", "City", "Street"},
+		DataSiggle: table.Row{
+			customer.CustomerID,
+			customer.CustomerName,
+			customer.CustomerEmail,
+			customer.Address.AddressCountry,
+			customer.Address.AddressCity,
+			customer.Address.AddressStreet,
+		},
+		DataALign: table.AlignCenter,
+	})
+	return nil
+}
+
+func UpdateProfile(db *sql.DB, customer *entity.Customer) (*entity.Customer, error) {
+	var newcustomer = &entity.Customer{
+		CustomerID:       customer.CustomerID,
+		CustomerEmail:    customer.CustomerEmail,
+		CustomerName:     customer.CustomerName,
+		CustomerPassword: customer.CustomerPassword,
+		Address:          customer.Address,
+	}
+	v := validator.New()
+
+	var count int
+	for {
+		if count > 4 {
+			fmt.Println("You exceed the limited chance. Please try again later!")
+			return customer, nil
+		}
+
+		oldpassword, _ := promptword("Please input your old password before updating")
+		err := bcrypt.CompareHashAndPassword([]byte(customer.CustomerPassword), []byte(oldpassword))
+		if err != nil {
+			count++
+			fmt.Println("err: incorrect password. try again!")
+			continue
+		}
+		break
+	}
+
+	fmt.Println("\ntype '-' for skip!")
+	newname := inputUpdateUsername(v, "New name")
+	newemail := inputUpdateEmail(v, "New email")
+	newpassword := inputUpdatePassword(v, "New password")
+	newcountry := inputUpdateCountry(v, "New country")
+	newcity := inputUpdateCity(v, "New city")
+	newstreet := inputUpdateStreet(v, "New street")
+
+	if len(newname) > 0 && newname != "-" {
+		newcustomer.CustomerName = newname
+	}
+
+	if len(newemail) > 0 && newemail != "-" {
+		newcustomer.CustomerEmail = newemail
+	}
+
+	if len(newpassword) > 0 && newpassword != "-" {
+		newcustomer.CustomerPassword = newpassword
+	}
+
+	if len(newcountry) > 0 && newcountry != "-" {
+		newcustomer.Address.AddressCountry = newcountry
+	}
+
+	if len(newcity) > 0 && newcity != "-" {
+		newcustomer.Address.AddressCity = newcity
+	}
+
+	if len(newstreet) > 0 && newstreet != "-" {
+		newcustomer.Address.AddressStreet = newstreet
+	}
+
+	err := handler.UpdateAdressByID(db, &newcustomer.Address)
+	if err != nil {
+		switch {
+		case errors.Is(err, handler.ErrorRecordNotFound):
+			panic(err)
+		default:
+			return customer, err
+		}
+	}
+	customer.Address = newcustomer.Address
+
+	err = handler.UpdateCustomerByID(db, newcustomer, newcustomer.CustomerPassword != customer.CustomerPassword)
+	if err != nil {
+		switch {
+		case errors.Is(err, handler.ErrorRecordNotFound):
+			panic(err)
+		default:
+			return customer, err
+		}
+	}
+	customer.CustomerName = newcustomer.CustomerName
+	customer.CustomerEmail = newcustomer.CustomerEmail
+	customer.CustomerPassword = newcustomer.CustomerPassword
+
+	return customer, nil
+}
+
