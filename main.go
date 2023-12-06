@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"pair-project/cli"
 	"pair-project/config"
 
@@ -81,9 +80,17 @@ func main() {
 								var choiceProdukID int
 
 								for !exit4 {
-									handler.DisplayClothesByCategory(db, handler.Categories[choiceCategory-1])
+									temp := handler.DisplayClothesByCategory(db, handler.Categories[choiceCategory-1])
 									fmt.Print("Silahkan pilih barang yang ingin dibeli (0 untuk kembali): ")
 									fmt.Scan(&choiceProdukID)
+
+									var temp1 int
+									if choiceProdukID != 0 {
+										temp1, err = handler.ByName(db, temp[choiceProdukID-1])
+										if err != nil {
+											panic("Error getting clothes by name!")
+										}
+									}
 
 									if choiceProdukID < 0 || choiceProdukID > len(handler.Categories) {
 										fmt.Println("Pilihan tidak valid. Silakan pilih lagi.")
@@ -92,7 +99,27 @@ func main() {
 										exit4 = true
 										handler.ListCategory(db)
 									} else {
-										// function getClothes
+										selectedClothes, err := handler.GetClothesByID(db, temp1)
+										if err != nil {
+											log.Fatal(err)
+										}
+										price, err := handler.GetPriceClothes(db, selectedClothes.ClothesID)
+										if err != nil {
+											log.Fatal(err)
+										}
+
+										fmt.Print("Enter the quantity: ")
+										var quantity int
+										fmt.Scan(&quantity)
+
+										err = handler.AddClothes(db, *selectedClothes, *customer, orderID, quantity)
+										if err != nil {
+											log.Fatal(err)
+										}
+
+										totalPrice += price * float64(quantity)
+										fmt.Printf("Added %d %s to your order.\n", quantity, selectedClothes.ClothesName)
+										fmt.Printf("Total price: %.2f.\n", totalPrice)
 									}
 								}
 							}
@@ -100,41 +127,61 @@ func main() {
 						}
 
 					case 2:
+						fmt.Println("--------------")
 						fmt.Println("Rental Pakaian")
+						fmt.Println("--------------")
+
 						// tampilkan kategori
 						kategori := handler.CategoryCostume()
 
 						// tampilkan list produk
 						err := handler.ListCostumes(db, kategori)
 						if err != nil {
-							log.Fatal(err)
+							log.Fatalln(err)
 						}
 
-						// input: costumeid, quantity, enddate
+						// rent function
 						price, err := handler.Rent(db, orderID)
 						if price == 0 {
 							continue // if out of stock
 						}
 						if err != nil {
-							log.Fatal(err)
+							log.Fatalln(err)
 						}
-						fmt.Println("price:", price)
+
+						fmt.Printf("\nRental price: %.2f\n", price)
+
+						// add to total
 						totalPrice += price
-						fmt.Printf("\nYour total is now: $%.2f\n\n", totalPrice)
+						fmt.Printf("\nYour total is now: $%.2f\n", totalPrice)
 					case 3:
+						fmt.Println("")
+						fmt.Println("--------")
 						fmt.Println("Pesanan")
+						fmt.Println("--------")
+						// check if totalprice = 0
+						if totalPrice == 0 {
+							fmt.Println("Order is empty. Total price is $0.00")
+							continue
+						}
+
 						// list barang pesanan
+						err := handler.ListPesanan(db, orderID)
+						if err != nil {
+							log.Fatalln(err)
+						}
 
 						// hitung diskon & pajak
+						fmt.Println("------------------------------------")
 						totalPrice = handler.CalcDiscount(totalPrice)
 						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n", totalPrice)
 
 						// insert total price ke tabel orders
-						err := handler.InsertTotal(db, totalPrice, orderID)
+						err = handler.InsertTotal(db, totalPrice, orderID)
 						if err != nil {
-							log.Fatal(err)
+							log.Fatalln(err)
 						}
-						os.Exit(1)
+						return
 
 					case 4:
 						fmt.Println("Edit Profil")
@@ -188,15 +235,12 @@ func main() {
 								fmt.Println("User Report")
 							case 2:
 								fmt.Println("Order Report")
-								err := handler.TotalQuantity(db)
+
+								err := handler.OrderReportMenu(db)
 								if err != nil {
-									log.Fatal(err)
+									log.Fatalln(err)
 								}
 
-								err = handler.RentalRevenueByCostume(db)
-								if err != nil {
-									log.Fatal(err)
-								}
 							case 3:
 								fmt.Println("Stock Report")
 							case 4:
