@@ -6,3 +6,9 @@ type Sale struct {
 	Clothes  Clothes
 	Quantity int
 }
+
+type ListSale struct {
+	Name      string
+	Quantity  int
+	SalePrice float64
+}
