@@ -9,7 +9,7 @@ import (
 
 func Rent(db *sql.DB, orderID int) (float64, error) {
 
-	// show menu & take input TODO: add loop if error
+	// show menu & take input
 	rentDetail, mssg, err := RentInput(db, orderID)
 	if err != nil {
 		return 0, fmt.Errorf("Rent: %w", err)
@@ -42,7 +42,7 @@ func Rent(db *sql.DB, orderID int) (float64, error) {
 
 func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 
-	// get input TODO: check if id is valid & add loop if error
+	// get input
 	var costumeID, quantity int
 
 	fmt.Println("Choose costume ID:")
@@ -62,8 +62,6 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 	}
 
 	var start, end string
-
-	// TODO: add date loop if error
 
 	fmt.Println("Insert rental date (format: 2023-05-09).")
 	fmt.Println("Start:")

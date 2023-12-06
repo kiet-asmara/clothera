@@ -7,7 +7,9 @@ import (
 	"os"
 	"pair-project/cli"
 	"pair-project/config"
+
 	"pair-project/entity"
+
 	"pair-project/handler"
 )
 
@@ -31,6 +33,7 @@ func main() {
 
 		switch choiceMainMenu {
 		case 1:
+
 			if nil == customer {
 				customer, err = cli.Login(db)
 				if err != nil {
@@ -46,7 +49,7 @@ func main() {
 			switch customer.CustomerType {
 			case entity.User:
 				// create order
-				orderID, err := handler.CreateOrder(db, 2)
+				orderID, err := handler.CreateOrder(db, customer.CustomerID)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -121,7 +124,6 @@ func main() {
 					case 3:
 						fmt.Println("Pesanan")
 						// list barang pesanan
-						// barang dipesan, jumlah, subtotal
 
 						// hitung diskon & pajak
 						totalPrice = handler.CalcDiscount(totalPrice)

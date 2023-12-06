@@ -1,8 +1,9 @@
 package cli
 
 import (
-	"database/sql"
 	"fmt"
+
+	"database/sql"
 	"pair-project/entity"
 	"pair-project/handler"
 	"pair-project/pkg/validator"
@@ -104,5 +105,5 @@ func Login(db *sql.DB) (*entity.Customer, error) {
 		return nil, err
 	}
 
-	return customer, nil
+	return existingCustomer, nil
 }
