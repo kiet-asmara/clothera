@@ -5,6 +5,7 @@ import (
 	"log"
 	"pair-project/cli"
 	"pair-project/config"
+	"pair-project/handler"
 )
 
 func main() {
@@ -29,9 +30,20 @@ func main() {
 			fmt.Scan(&CustomerType)
 
 			exit2 := false
+
 			var choiceCustomer int
+
 			switch CustomerType {
 			case "Customer":
+				// create order
+				orderID, err := handler.CreateOrder(db, 2)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				// create total price
+				var totalPrice float64
+
 				for !exit2 {
 					cli.ShowCustomerMenu()
 					fmt.Print("Choice: ")
@@ -42,8 +54,24 @@ func main() {
 						fmt.Println("Beli")
 					case 2:
 						fmt.Println("Rental Pakaian")
+						// tampilkan kategori
+
+						// tampilkan list produk
+
+						// input: costumeid, quantity, enddate
+						price, err := handler.Rent(db, orderID)
+						if err != nil {
+							log.Fatal(err)
+						}
+						fmt.Println("price:", price)
+						totalPrice += price
+						fmt.Printf("\nYour total is now: $%.2f\n\n", totalPrice)
 					case 3:
 						fmt.Println("Pesanan")
+						// insert total price ke tabel orders
+
+						// list beli & rental
+
 					case 4:
 						fmt.Println("Edit Profil")
 					case 5:

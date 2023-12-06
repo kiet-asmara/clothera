@@ -5,4 +5,5 @@ type Costume struct {
 	CostumeName     string
 	CostumeCategory string
 	CostumePrice    float64
+	CostumeStock    int
 }
