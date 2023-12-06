@@ -1,10 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"pair-project/cli"
 	"pair-project/config"
+	"pair-project/entity"
+	"pair-project/handler"
 )
 
 func main() {
@@ -19,19 +22,27 @@ func main() {
 
 	for !exitMainMenu {
 		cli.ShowMainMenu()
-		fmt.Print("Choice: ")
-		fmt.Scan(&choiceMainMenu)
+		choiceMainMenu = cli.PromptChoice("Choice")
+
+		// user yang udah authenticated disimpan disini
+		var customer *entity.Customer
+	RG_OK:
 
 		switch choiceMainMenu {
 		case 1:
-			CustomerType := ""
-			fmt.Print("Pilih Tipe Customer (Admin / Customer): ")
-			fmt.Scan(&CustomerType)
+			if nil == customer {
+				customer, err = cli.Login(db)
+				if err != nil {
+					fmt.Printf("Sorry your crendential is not valid. Please try again!\n\n")
+					continue
+				}
+				fmt.Printf("Login Success\n\n")
+			}
 
 			exit2 := false
 			var choiceCustomer int
-			switch CustomerType {
-			case "Customer":
+			switch customer.CustomerType {
+			case entity.User:
 				for !exit2 {
 					cli.ShowCustomerMenu()
 					fmt.Print("Choice: ")
@@ -39,7 +50,41 @@ func main() {
 
 					switch choiceCustomer {
 					case 1:
-						fmt.Println("Beli")
+						handler.ListCategory(db)
+						exit3 := false
+						var choiceCategory int
+						for !exit3 {
+							fmt.Print("Silahkan pilih kategori (0 untuk kembali): ")
+							fmt.Scan(&choiceCategory)
+
+							if choiceCategory < 0 || choiceCategory > len(handler.Categories) {
+								fmt.Println("Pilihan tidak valid. Silakan pilih lagi.")
+								continue
+							} else if choiceCategory == 0 {
+								exit3 = true
+							} else {
+								exit4 := false
+								var choiceProdukID int
+
+								for !exit4 {
+									handler.DisplayClothesByCategory(db, handler.Categories[choiceCategory-1])
+									fmt.Print("Silahkan pilih barang yang ingin dibeli (0 untuk kembali): ")
+									fmt.Scan(&choiceProdukID)
+
+									if choiceProdukID < 0 || choiceProdukID > len(handler.Categories) {
+										fmt.Println("Pilihan tidak valid. Silakan pilih lagi.")
+										continue
+									} else if choiceProdukID == 0 {
+										exit4 = true
+										handler.ListCategory(db)
+									} else {
+										// function getClothes
+									}
+								}
+							}
+
+						}
+
 					case 2:
 						fmt.Println("Rental Pakaian")
 					case 3:
@@ -53,7 +98,7 @@ func main() {
 						fmt.Println("Invalid choice")
 					}
 				}
-			case "Admin":
+			case entity.Admin:
 				for !exit2 {
 					cli.ShowAdminMenu()
 					fmt.Print("Choice: ")
@@ -113,7 +158,21 @@ func main() {
 				}
 			}
 		case 2:
-			fmt.Println("Register")
+			var err error
+			customer, err = cli.Register(db)
+			if err != nil {
+				switch {
+				case errors.Is(err, handler.ErrorDuplicateEntry):
+					fmt.Printf("User with this email already exists. Try login instead!\n\n")
+				default:
+					fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+				}
+				continue
+			}
+
+			fmt.Printf("Register Success!\n\n")
+			choiceMainMenu = 1
+			goto RG_OK
 		case 3:
 			fmt.Println("Thank you for ordering")
 			exitMainMenu = true
