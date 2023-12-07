@@ -29,7 +29,7 @@ func FetchAllCategoriesFromDatabaseCostumes(db *sql.DB) []string {
 
 func GetSelectedCategoryFromUserCostumes(categories []string) string {
 	var selectedCategory string
-	fmt.Print("Select Category: ")
+	fmt.Print("Select Category (Type category name): ")
 	fmt.Scan(&selectedCategory)
 	return selectedCategory
 }
