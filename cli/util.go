@@ -11,7 +11,7 @@ import (
 
 // input untuk satu kata
 func promptword(prompt string) (string, error) {
-	fmt.Printf("%-10s: ", prompt)
+	fmt.Printf("%-15s: ", prompt)
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanWords)
 	scanner.Scan()
@@ -24,7 +24,7 @@ func promptword(prompt string) (string, error) {
 
 // input untuk satu lines
 func promptline(prompt string) (string, error) {
-	fmt.Printf("%-10s: ", prompt)
+	fmt.Printf("%-15s: ", prompt)
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Split(bufio.ScanLines)
 	scanner.Scan()

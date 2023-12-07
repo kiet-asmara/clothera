@@ -88,7 +88,11 @@ func ShowProfileMenu() {
 }
 
 func ShowAdminUpdateProductMenu() {
-  fmt.Println("1 -> Clothes")
+	fmt.Println("\n------------")
+	fmt.Printf("Product Category\n")
+	fmt.Println("------------")
+
+	fmt.Println("1 -> Clothes")
 	fmt.Println("2 -> Rents")
 	fmt.Println("3 -> Back\n")
 
@@ -100,21 +104,26 @@ func ShowAdminAddProductMenu() {
 	fmt.Println("3 -> Back\n")
 }
 
-
 func ShowAdminUpdateDetailMenu() {
+	fmt.Println("\n------------")
+	fmt.Printf("Detail\n")
+	fmt.Println("------------")
+
 	fmt.Println("1 -> List")
 	fmt.Println("2 -> Update")
 	fmt.Println("3 -> Back\n")
 }
 
-func ShowAdminProductCategoriesMenu(categories []string) {
+func ShowAdminProductCategoriesMenu(categories []string, product entity.Product) {
+	fmt.Println("\n------------")
+	fmt.Printf("%s Category\n", strings.Title(product.Types))
+	fmt.Println("------------")
+
 	for idx, ctgr := range categories {
 		fmt.Printf("%-2d - %-10s\n", idx+1, ctgr)
 	}
-	fmt.Println()
+	fmt.Printf("%-2d - %-10s\n", len(categories)+1, "back")
 }
-
-
 
 func PromptChoice(prompt string) int {
 	input, err := promptline(prompt)
@@ -518,4 +527,3 @@ func HandleUpdateProductCostume(db *sql.DB, choice int, category []string) error
 
 	return nil
 }
-
