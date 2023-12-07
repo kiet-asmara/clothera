@@ -50,3 +50,13 @@ func InsertProductIntoDatabaseCostumes(db *sql.DB, costume entity.Costume) error
 		costume.CostumeName, costume.CostumeCategory, costume.CostumePrice, costume.CostumeStock)
 	return err
 }
+
+func PrintCategoriesCostumes(categories []string) {
+	fmt.Println("List of Categories:")
+	num := 1
+	for _, category := range categories {
+		fmt.Printf("%d. %s\n", num, category)
+		num++
+	}
+	fmt.Println()
+}

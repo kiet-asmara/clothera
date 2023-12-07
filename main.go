@@ -109,11 +109,7 @@ func main() {
 											log.Fatal(err)
 										}
 
-										fmt.Print("Enter the quantity: ")
-										var quantity int
-										fmt.Scan(&quantity)
-
-										err = handler.AddClothes(db, *selectedClothes, *customer, orderID, quantity)
+										quantity, err := handler.AddClothes(db, *selectedClothes, *customer, orderID)
 										if err != nil {
 											log.Fatal(err)
 										}
@@ -194,7 +190,7 @@ func main() {
 									switch addProdukAdmin {
 									case 1:
 										categories := handler.FetchAllCategoriesFromDatabase(db)
-										fmt.Println("Available Categories:", categories)
+										handler.PrintCategoriesClothes(categories)
 
 										selectedCategory := handler.GetSelectedCategoryFromUser(categories)
 
@@ -208,7 +204,7 @@ func main() {
 										}
 									case 2:
 										categories := handler.FetchAllCategoriesFromDatabaseCostumes(db)
-										fmt.Println("Available Categories:", categories)
+										handler.PrintCategoriesCostumes(categories)
 
 										selectedCategory := handler.GetSelectedCategoryFromUserCostumes(categories)
 

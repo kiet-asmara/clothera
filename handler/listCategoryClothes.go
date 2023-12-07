@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-var Categories []string // Global variable to store categories
+var Categories []string
 
 func ListCategory(db *sql.DB) {
 	query := "SELECT DISTINCT ClothesCategory FROM Clothes"
@@ -17,7 +17,7 @@ func ListCategory(db *sql.DB) {
 	defer rows.Close()
 
 	var category string
-	Categories = nil // Reset Categories slice before populating it again
+	Categories = nil
 
 	fmt.Println("\n---Clothing Categories---")
 	num := 1

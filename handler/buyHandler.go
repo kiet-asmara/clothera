@@ -2,35 +2,47 @@ package handler
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"pair-project/entity"
 )
 
-func AddClothes(db *sql.DB, clothes entity.Clothes, customer entity.Customer, orderID int, quantity int) error {
-	available, err := CheckClothesAvailability(db, clothes.ClothesID, quantity)
-	if err != nil {
-		return err
-	}
-	if !available {
-		return errors.New("Insufficient stock for the selected clothes")
-	}
+func AddClothes(db *sql.DB, clothes entity.Clothes, customer entity.Customer, orderID int) (int, error) {
+	for {
+		fmt.Print("Enter quantity: ")
+		var quantity int
+		_, err := fmt.Scan(&quantity)
+		if err != nil {
+			fmt.Println("Invalid input. Please enter a valid quantity.")
+			continue
+		}
 
-	saleQuery := `
-		INSERT INTO sales (OrderID, ClothesID, Quantity)
-		VALUES (?, ?, ?)
-	`
-	_, err = db.Exec(saleQuery, orderID, clothes.ClothesID, quantity)
-	if err != nil {
-		return err
-	}
+		available, err := CheckClothesAvailability(db, clothes.ClothesID, quantity)
+		if err != nil {
+			return 0, fmt.Errorf("error checking clothes availability: %v", err)
+		}
 
-	err = UpdateStock(db, clothes.ClothesID, quantity)
-	if err != nil {
-		return err
-	}
+		if !available {
+			fmt.Println("Insufficient stock for the selected clothes. Please enter a valid quantity.")
+			continue
+		}
 
-	return nil
+		saleQuery := `
+			INSERT INTO sales (OrderID, ClothesID, Quantity)
+			VALUES (?, ?, ?)
+		`
+		_, err = db.Exec(saleQuery, orderID, clothes.ClothesID, quantity)
+		if err != nil {
+			return 0, fmt.Errorf("error inserting sale record: %v", err)
+		}
+
+		err = UpdateStock(db, clothes.ClothesID, quantity)
+		if err != nil {
+			return 0, fmt.Errorf("error updating stock: %v", err)
+		}
+
+		fmt.Println("Clothes added to the order successfully.")
+		return quantity, nil
+	}
 }
 
 func CheckClothesAvailability(db *sql.DB, clothesID int, quantity int) (bool, error) {
