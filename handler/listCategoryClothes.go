@@ -17,6 +17,7 @@ func ListCategory(db *sql.DB) {
 	defer rows.Close()
 
 	var category string
+
 	Categories = nil
 
 	fmt.Println("\n---Clothing Categories---")
