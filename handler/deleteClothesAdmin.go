@@ -8,37 +8,50 @@ import (
 )
 
 func ShowProductsByCategory(db *sql.DB) {
-	// Implementasi untuk menampilkan semua produk berdasarkan category yang user klik
-	// ...
+	for {
+		var categoryToDisplay string
+		fmt.Print("Enter the category to display (type category name): ")
+		fmt.Scan(&categoryToDisplay)
 
-	var categoryToDisplay string
-	fmt.Print("Enter the category to display (type category name): ")
-	fmt.Scan(&categoryToDisplay)
+		// Gunakan db.Query untuk mendapatkan data dari database
+		rows, err := db.Query("SELECT * FROM Clothes WHERE ClothesCategory = ?", categoryToDisplay)
 
-	// Gunakan db.Query untuk mendapatkan data dari database
-	rows, err := db.Query("SELECT * FROM Clothes WHERE ClothesCategory = ?", categoryToDisplay)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	fmt.Printf("Showing products in the '%s' category...\n", categoryToDisplay)
-	fmt.Printf("%-10s %-30s %-15s %-15s %-15s\n", "ID", "Name", "Category", "Price", "Stock")
-	fmt.Println(strings.Repeat("-", 80))
-
-	for rows.Next() {
-		var id int
-		var name, category string
-		var price float64
-		var stock int
-
-		err := rows.Scan(&id, &name, &category, &price, &stock)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%-10d %-30s %-15s %-15.2f %-15d\n", id, name, category, price, stock)
+		// Periksa apakah ada hasil yang ditemukan
+		if !rows.Next() {
+			fmt.Printf("No products found in the '%s' category.\n", categoryToDisplay)
+			continue // Lanjut ke iterasi berikutnya jika tidak ada produk yang ditemukan
+		}
+
+		// Tampilkan produk jika ada hasil yang ditemukan
+		fmt.Printf("Showing products in the '%s' category...\n", categoryToDisplay)
+		fmt.Printf("%-10s %-30s %-15s %-15s %-15s\n", "ID", "Name", "Category", "Price", "Stock")
+		fmt.Println(strings.Repeat("-", 80))
+
+		for rows.Next() {
+			var id int
+			var name, category string
+			var price float64
+			var stock int
+
+			err := rows.Scan(&id, &name, &category, &price, &stock)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			fmt.Printf("%-10d %-30s %-15s %-15.2f %-15d\n", id, name, category, price, stock)
+		}
+
+		// Tanya user apakah ingin melihat kategori lainnya
+		fmt.Print("Do you want to view products in another category? (y/n): ")
+		var input string
+		fmt.Scan(&input)
+		if strings.ToLower(input) != "y" {
+			break // Keluar dari loop jika user tidak ingin melihat kategori lainnya
+		}
 	}
 }
 

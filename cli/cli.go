@@ -94,14 +94,14 @@ func ShowAdminUpdateProductMenu() {
 
 	fmt.Println("1 -> Clothes")
 	fmt.Println("2 -> Rents")
-	fmt.Println("3 -> Back\n")
+	fmt.Printf("3 -> Back\n\n")
 
 }
 
 func ShowAdminAddProductMenu() {
 	fmt.Println("1 -> Clothes")
 	fmt.Println("2 -> Rents")
-	fmt.Println("3 -> Back\n")
+	fmt.Printf("3 -> Back\n\n")
 }
 
 func ShowAdminUpdateDetailMenu() {
@@ -111,7 +111,7 @@ func ShowAdminUpdateDetailMenu() {
 
 	fmt.Println("1 -> List")
 	fmt.Println("2 -> Update")
-	fmt.Println("3 -> Back\n")
+	fmt.Printf("3 -> Back\n\n")
 }
 
 func ShowAdminProductCategoriesMenu(categories []string, product entity.Product) {
@@ -146,12 +146,12 @@ func Register(db *sql.DB) (*entity.Customer, error) {
 	var address = &entity.Address{}
 	v := validator.New()
 
-	customer.CustomerName = inputUsername(v, "name")
-	customer.CustomerEmail = inputEmail(v, "email")
-	customer.CustomerPassword = inputPassword(v, "password")
-	address.AddressCountry = inputCountry(v, "country")
-	address.AddressCity = inputCity(v, "city")
-	address.AddressStreet = inputStreet(v, "street")
+	customer.CustomerName = inputUsername(v, "name", false)
+	customer.CustomerEmail = inputEmail(v, "email", false)
+	customer.CustomerPassword = inputPassword(v, "password", false)
+	address.AddressCountry = inputCountry(v, "country", false)
+	address.AddressCity = inputCity(v, "city", false)
+	address.AddressStreet = inputStreet(v, "street", false)
 
 	err := handler.InsertAddress(db, address)
 	if err != nil {
@@ -171,8 +171,8 @@ func Login(db *sql.DB) (*entity.Customer, error) {
 	var customer = &entity.Customer{}
 	v := validator.New()
 
-	customer.CustomerEmail = inputEmail(v, "email")
-	customer.CustomerPassword = inputPassword(v, "password")
+	customer.CustomerEmail = inputEmail(v, "email", false)
+	customer.CustomerPassword = inputPassword(v, "password", false)
 
 	existingCustomer, err := handler.GetCustomerByEmail(db, customer.CustomerEmail)
 	if err != nil {
