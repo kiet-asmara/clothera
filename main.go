@@ -142,7 +142,7 @@ func main() {
 							log.Fatalln(err)
 						}
 
-						fmt.Printf("Rental price: %.2f\n", price)
+						fmt.Printf("Rental price: $%.2f\n", price)
 
 						// add to total
 						totalPrice += price
@@ -176,7 +176,6 @@ func main() {
 						if err != nil {
 							log.Fatalln(err)
 						}
-						return
 
 					// Update Profile
 					case 4:

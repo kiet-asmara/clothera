@@ -43,14 +43,14 @@ CREATE TABLE `Sales` (
   `SaleID` INT PRIMARY KEY AUTO_INCREMENT,
   `OrderID` INT NOT NULL,
   `ClothesID` INT NOT NULL,
-  `Quantity` INT NOT NULL CHECK(`Quantity` > 0)
+  `Quantity` INT NOT NULL CHECK(`Quantity` >= 0)
 );
 
 CREATE TABLE `Rents` (
   `RentID` INT PRIMARY KEY AUTO_INCREMENT,
   `OrderID` INT NOT NULL,
   `CostumeID` INT NOT NULL,
-  `Quantity` INT NOT NULL CHECK(`Quantity` > 0),
+  `Quantity` INT NOT NULL CHECK(`Quantity` >= 0),
   `StartDate` DATE NOT NULL,
   `EndDate` DATE NOT NULL,
   `RentPrice` DEC(10,2) NOT NULL CHECK(`RentPrice` >= 0)

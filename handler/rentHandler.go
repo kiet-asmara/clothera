@@ -45,9 +45,9 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 	// get input
 	var costumeID, quantity int
 
-	fmt.Print("Choose costume ID:\n")
+	fmt.Print("Choose costume ID:")
 	fmt.Scan(&costumeID)
-	fmt.Print("How many costumes:\n")
+	fmt.Print("How many costumes:")
 	fmt.Scan(&quantity)
 
 	// check stock
@@ -65,9 +65,9 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 
 	fmt.Println("")
 	fmt.Println("Insert rental date (format: 2023-05-09).")
-	fmt.Println("Start:")
+	fmt.Print("Start:")
 	fmt.Scan(&start)
-	fmt.Println("End:")
+	fmt.Print("End:")
 	fmt.Scan(&end)
 	fmt.Println("")
 
@@ -126,7 +126,7 @@ func RentPrice(db *sql.DB, rent entity.Rent) (float64, error) {
 	// get number of days
 	days := DaysBetween(rent.StartDate, rent.EndDate)
 	if days == 0 {
-		return 0, nil
+		days = 1
 	}
 
 	// calculate price

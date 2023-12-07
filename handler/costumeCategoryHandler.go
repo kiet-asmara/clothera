@@ -10,7 +10,7 @@ func CategoryCostume() string {
 	fmt.Println("\n---Costume categories---")
 	fmt.Println("1. Cosplay")
 	fmt.Println("2. Formal")
-	fmt.Print("Pilih kategori (1/2): \n")
+	fmt.Print("Pilih kategori (1/2): ")
 
 	var choice int
 	_, err := fmt.Scan(&choice)
@@ -53,7 +53,7 @@ func ListCostumes(db *sql.DB, category string) error {
 	fmt.Printf("\n---%s Costumes---\n", category)
 
 	for _, c := range costumes {
-		fmt.Printf("%d. %s, Price: %.2f, Stock: %d\n", c.CostumeID, c.CostumeName, c.CostumePrice, c.CostumeStock)
+		fmt.Printf("%d. %s, Price/day: %.2f, Stock: %d\n", c.CostumeID, c.CostumeName, c.CostumePrice, c.CostumeStock)
 	}
 	return nil
 }

@@ -146,7 +146,7 @@ func ListSales(db *sql.DB, orderID int) error {
 	}
 
 	for _, s := range saleList {
-		fmt.Printf("%s, Quantity: %d, Price: %.2f\n", s.Name, s.Quantity, s.SalePrice)
+		fmt.Printf("%s, Quantity: %d, Price: $%.2f\n", s.Name, s.Quantity, s.SalePrice)
 	}
 
 	return nil
