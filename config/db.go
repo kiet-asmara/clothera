@@ -2,7 +2,6 @@ package config
 
 import (
 	"database/sql"
-	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -17,10 +16,10 @@ const (
 )
 
 func GetDB() (*sql.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
+	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
 
 	// db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/clothera")
-	db, err := sql.Open("mysql", dsn)
+	db, err := sql.Open("mysql", local)
 
 	if err != nil {
 		return nil, err
