@@ -39,7 +39,7 @@ func promptline(prompt string) (string, error) {
 /*                            input auth                            */
 /* ---------------------------------------------------------------- */
 
-func inputUsername(v *validator.Validator, prompt string) string {
+func inputUsername(v *validator.Validator, prompt string, fortest bool) string {
 	for {
 		v.Clear()
 		input, err := promptword(prompt)
@@ -49,13 +49,16 @@ func inputUsername(v *validator.Validator, prompt string) string {
 
 		if ValidateUsername(v, input); !v.Valid() {
 			fmt.Println(v.ShowError())
+			if fortest {
+				return ""
+			}
 		} else {
 			return input
 		}
 	}
 }
 
-func inputEmail(v *validator.Validator, prompt string) string {
+func inputEmail(v *validator.Validator, prompt string, fortest bool) string {
 	for {
 		v.Clear()
 		input, err := promptword(prompt)
@@ -65,13 +68,16 @@ func inputEmail(v *validator.Validator, prompt string) string {
 
 		if ValidateEmail(v, input); !v.Valid() {
 			fmt.Println(v.ShowError())
+			if fortest {
+				return ""
+			}
 		} else {
 			return input
 		}
 	}
 }
 
-func inputPassword(v *validator.Validator, prompt string) string {
+func inputPassword(v *validator.Validator, prompt string, fortest bool) string {
 	for {
 		v.Clear()
 		input, err := promptword(prompt)
@@ -81,13 +87,16 @@ func inputPassword(v *validator.Validator, prompt string) string {
 
 		if ValidatePasswordPlaintext(v, input); !v.Valid() {
 			fmt.Println(v.ShowError())
+			if fortest {
+				return ""
+			}
 		} else {
 			return input
 		}
 	}
 }
 
-func inputCountry(v *validator.Validator, prompt string) string {
+func inputCountry(v *validator.Validator, prompt string, fortest bool) string {
 	for {
 		v.Clear()
 		input, err := promptword(prompt)
@@ -97,13 +106,16 @@ func inputCountry(v *validator.Validator, prompt string) string {
 
 		if ValidateCountry(v, input); !v.Valid() {
 			fmt.Println(v.ShowError())
+			if fortest {
+				return ""
+			}
 		} else {
 			return input
 		}
 	}
 }
 
-func inputCity(v *validator.Validator, prompt string) string {
+func inputCity(v *validator.Validator, prompt string, fortest bool) string {
 	for {
 		v.Clear()
 		input, err := promptword(prompt)
@@ -113,13 +125,16 @@ func inputCity(v *validator.Validator, prompt string) string {
 
 		if ValidateCity(v, input); !v.Valid() {
 			fmt.Println(v.ShowError())
+			if fortest {
+				return ""
+			}
 		} else {
 			return input
 		}
 	}
 }
 
-func inputStreet(v *validator.Validator, prompt string) string {
+func inputStreet(v *validator.Validator, prompt string, fortest bool) string {
 	for {
 		v.Clear()
 		input, err := promptline(prompt)
@@ -131,6 +146,9 @@ func inputStreet(v *validator.Validator, prompt string) string {
 
 		if ValidateStreet(v, input); !v.Valid() {
 			fmt.Println(v.ShowError())
+			if fortest {
+				return ""
+			}
 		} else {
 			return input
 		}
