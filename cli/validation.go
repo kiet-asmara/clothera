@@ -2,6 +2,7 @@ package cli
 
 import (
 	"pair-project/pkg/validator"
+	"strconv"
 	"strings"
 )
 
@@ -37,4 +38,20 @@ func ValidateCity(v *validator.Validator, city string) {
 func ValidateStreet(v *validator.Validator, street string) {
 	v.Check(street != "", "street", "must be provided")
 	v.Check(!strings.ContainsAny(street, "\n\t\r!@#$%^&*()_+-=?><';:{}[]|"), "street", "must not contain special character")
+}
+
+func ValidateStringNoSpecialChar(v *validator.Validator, input string) {
+	v.Check(input != "", "value", "must be provided")
+	v.Check(!strings.ContainsAny(input, " \n\t\r!@#$%^&*()_+-=?><';:{}[]|123456789"), "vlaue", "must not contain special character or number")
+}
+
+func ValidateNumber(v *validator.Validator, input string) {
+	v.Check(input != "", "value", "must be provided")
+
+	num, err := strconv.ParseFloat(input, 64)
+	if err != nil {
+		v.AddError("value", "must be valid number")
+	}
+
+	v.Check(num > 0, "value", "must be positive")
 }
