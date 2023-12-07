@@ -10,7 +10,7 @@ func CategoryCostume() string {
 	fmt.Println("\n---Costume categories---")
 	fmt.Println("1. Cosplay")
 	fmt.Println("2. Formal")
-	fmt.Println("Pilih kategori (1/2).")
+	fmt.Print("Pilih kategori (1/2): \n")
 
 	var choice int
 	_, err := fmt.Scan(&choice)

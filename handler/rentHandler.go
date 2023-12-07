@@ -45,9 +45,9 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 	// get input
 	var costumeID, quantity int
 
-	fmt.Println("Choose costume ID:")
+	fmt.Print("Choose costume ID:\n")
 	fmt.Scan(&costumeID)
-	fmt.Println("How many costumes:")
+	fmt.Print("How many costumes:\n")
 	fmt.Scan(&quantity)
 
 	// check stock
