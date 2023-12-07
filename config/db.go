@@ -2,32 +2,26 @@ package config
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// var DB *sql.DB
+const (
+	dbUser     = "root"
+	dbPassword = "bE3eF4EDf5-gacEGEh2E43eB3AEG2daE"
+	dbHost     = "viaduct.proxy.rlwy.net"
+	dbPort     = "38725"
+	dbName     = "railway"
+	// local      = "root:@tcp(127.0.0.1:3306)/clothera"
+)
 
-// func ConnectDB() {
-// 	const (
-// 		dbUser     = "root"
-// 		dbPassword = "a341CgeH16HbaGAHBdBfB3BdHagGggEg"
-// 		dbHost     = "roundhouse.proxy.rlwy.net"
-// 		dbPort     = "38992"
-// 		dbName     = "railway"
-// 	)
+func GetDB() (*sql.DB, error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
 
-// 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
-
-// 	var err error
-// 	DB, err = sql.Open("mysql", dsn)
-// 	if err != nil {
-// 		panic(err.Error())
-// 	}
-// }
-
-func GetDB(dsn string) (*sql.DB, error) {
+	// db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/clothera")
 	db, err := sql.Open("mysql", dsn)
+
 	if err != nil {
 		return nil, err
 	}
