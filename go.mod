@@ -3,6 +3,7 @@ module pair-project
 go 1.21.4
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/jedib0t/go-pretty v4.3.0+incompatible
 	golang.org/x/crypto v0.16.0

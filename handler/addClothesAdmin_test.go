@@ -28,7 +28,7 @@ func Test_AddClothes(t *testing.T) {
 	// succes test case
 	clothesSuccess := entity.Clothes{
 		ClothesName:     "Sweater",
-		ClothesCategory: "Jaket",
+		ClothesCategory: "Jarum",
 		ClothesPrice:    50,
 		ClothesStock:    50,
 	}
