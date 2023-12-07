@@ -260,9 +260,19 @@ func main() {
 
 							switch productChoice {
 							case 1:
+								fmt.Println("-----------")
 								fmt.Println("User Report")
+								fmt.Println("-----------")
+
+								err := handler.UserReportMenu(db)
+								if err != nil {
+									log.Fatalln(err)
+								}
+
 							case 2:
+								fmt.Println("------------")
 								fmt.Println("Order Report")
+								fmt.Println("------------")
 
 								err := handler.OrderReportMenu(db)
 								if err != nil {

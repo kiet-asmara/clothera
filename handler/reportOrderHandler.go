@@ -237,6 +237,3 @@ ORDER BY TotalSalesPrice DESC`
 
 	return nil
 }
-
-// stock
-// which items out of stock, which items low on stock < 5

@@ -13,3 +13,15 @@ type Customer struct {
 	CustomerPassword string
 	CustomerType     string
 }
+
+type CustomerRevenue struct {
+	ID      int
+	Name    string
+	Revenue float64
+}
+
+type CustomerOrders struct {
+	ID         int
+	Name       string
+	OrderCount int
+}
