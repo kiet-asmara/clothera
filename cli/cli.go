@@ -87,11 +87,34 @@ func ShowProfileMenu() {
 	fmt.Println("")
 }
 
+func ShowAdminUpdateProductMenu() {
+  fmt.Println("1 -> Clothes")
+	fmt.Println("2 -> Rents")
+	fmt.Println("3 -> Back\n")
+
+}
+
 func ShowAdminAddProductMenu() {
 	fmt.Println("1 -> Clothes")
 	fmt.Println("2 -> Rents")
 	fmt.Println("3 -> Back\n")
 }
+
+
+func ShowAdminUpdateDetailMenu() {
+	fmt.Println("1 -> List")
+	fmt.Println("2 -> Update")
+	fmt.Println("3 -> Back\n")
+}
+
+func ShowAdminProductCategoriesMenu(categories []string) {
+	for idx, ctgr := range categories {
+		fmt.Printf("%-2d - %-10s\n", idx+1, ctgr)
+	}
+	fmt.Println()
+}
+
+
 
 func PromptChoice(prompt string) int {
 	input, err := promptline(prompt)
@@ -283,3 +306,216 @@ func UpdateProfile(db *sql.DB, customer *entity.Customer) (*entity.Customer, err
 
 	return customer, nil
 }
+
+func HandleUpdateProductClothes(db *sql.DB, choice int, category []string) error {
+	var exit bool
+
+	for !exit {
+		ShowAdminUpdateDetailMenu()
+		choicedetail := PromptChoice("Choice")
+
+		clothes, err := handler.GetAllClothesByCategory(db, category[choice-1])
+		if err != nil {
+			return err
+		}
+
+		switch choicedetail {
+		case 1:
+
+			var data []table.Row
+			for _, clothe := range clothes {
+				row := table.Row{clothe.ClothesID, clothe.ClothesName, clothe.ClothesCategory, clothe.ClothesPrice, clothe.ClothesStock}
+				data = append(data, row)
+			}
+
+			table.Render(table.RenderParam{
+				Title:      category[choice-1],
+				TitleAlign: table.AlignCenter,
+				Header:     []string{"ID", "Name", "Category", "Price", "Stock"},
+				DataList:   data,
+			})
+
+		case 2:
+
+			var clothe *entity.Clothes
+			for {
+				var err error
+
+				id := PromptChoice("Which product do you want to update (ID)")
+
+				var exist bool
+				for _, clothe := range clothes {
+					if clothe.ClothesID == id {
+						exist = true
+					}
+				}
+
+				if !exist {
+					fmt.Printf("Clothes category %v with this id is not found\n\n", category[choice-1])
+					continue
+				}
+
+				clothe, err = handler.GetClothesByID(db, id)
+				if err != nil {
+					switch {
+					case errors.Is(err, sql.ErrNoRows):
+						panic(err)
+					default:
+						return err
+					}
+				}
+				break
+			}
+
+			var v = validator.New()
+			var newclothe = &entity.Clothes{}
+
+			fmt.Println("\ntype '-' for skip!")
+			newclothe.ClothesName = inputUpdateString(v, "New clothes name")
+			newclothe.ClothesCategory = inputUpdateString(v, "New clothes category")
+			newclothe.ClothesPrice = inputUpdateNumber(v, "New clothes price")
+			newclothe.ClothesStock = int(inputUpdateNumber(v, "New clothes stock"))
+
+			if len(newclothe.ClothesName) > 0 && newclothe.ClothesName != "-" {
+				clothe.ClothesName = newclothe.ClothesName
+			}
+
+			if len(newclothe.ClothesCategory) > 0 && newclothe.ClothesCategory != "-" {
+				clothe.ClothesCategory = newclothe.ClothesCategory
+			}
+
+			if newclothe.ClothesPrice != -1 {
+				clothe.ClothesPrice = newclothe.ClothesPrice
+			}
+
+			if newclothe.ClothesStock != -1 {
+				clothe.ClothesStock = newclothe.ClothesStock
+			}
+
+			err = handler.UpdateClotheByID(db, clothe)
+			if err != nil {
+				switch {
+				case errors.Is(err, handler.ErrorRecordNotFound):
+					panic(err)
+				default:
+					return err
+				}
+			}
+
+		case 3:
+			exit = true
+
+		default:
+			fmt.Println("Invalid Choice")
+		}
+	}
+
+	return nil
+}
+
+func HandleUpdateProductCostume(db *sql.DB, choice int, category []string) error {
+	var exit bool
+
+	for !exit {
+		ShowAdminUpdateDetailMenu()
+		choicedetail := PromptChoice("Choice")
+
+		costumes, err := handler.GetAllCostumeByCategory(db, category[choice-1])
+		if err != nil {
+			return err
+		}
+
+		switch choicedetail {
+		case 1:
+
+			var data []table.Row
+			for _, costume := range costumes {
+				row := table.Row{costume.CostumeID, costume.CostumeName, costume.CostumeCategory, costume.CostumePrice, costume.CostumeStock}
+				data = append(data, row)
+			}
+
+			table.Render(table.RenderParam{
+				Title:      category[choice-1],
+				TitleAlign: table.AlignCenter,
+				Header:     []string{"ID", "Name", "Category", "Price", "Stock"},
+				DataList:   data,
+			})
+
+		case 2:
+
+			var costume *entity.Costume
+			for {
+				var err error
+
+				id := PromptChoice("Which product do you want to update (ID)")
+
+				var exist bool
+				for _, costume := range costumes {
+					if costume.CostumeID == id {
+						exist = true
+					}
+				}
+
+				if !exist {
+					fmt.Printf("Costume category %v with this id is not found\n\n", category[choice-1])
+					continue
+				}
+
+				costume, err = handler.GetCostumeByID(db, id)
+				if err != nil {
+					switch {
+					case errors.Is(err, sql.ErrNoRows):
+						panic(err)
+					default:
+						return err
+					}
+				}
+				break
+			}
+
+			var v = validator.New()
+			var newcostume = &entity.Clothes{}
+
+			fmt.Println("\ntype '-' for skip!")
+			newcostume.ClothesName = inputUpdateString(v, "New clothes name")
+			newcostume.ClothesCategory = inputUpdateString(v, "New clothes category")
+			newcostume.ClothesPrice = inputUpdateNumber(v, "New clothes price")
+			newcostume.ClothesStock = int(inputUpdateNumber(v, "New clothes stock"))
+
+			if len(newcostume.ClothesName) > 0 && newcostume.ClothesName != "-" {
+				costume.CostumeName = newcostume.ClothesName
+			}
+
+			if len(newcostume.ClothesCategory) > 0 && newcostume.ClothesCategory != "-" {
+				costume.CostumeCategory = newcostume.ClothesCategory
+			}
+
+			if newcostume.ClothesPrice != -1 {
+				costume.CostumePrice = newcostume.ClothesPrice
+			}
+
+			if newcostume.ClothesStock != -1 {
+				costume.CostumeStock = newcostume.ClothesStock
+			}
+
+			err = handler.UpdateCostumeByID(db, costume)
+			if err != nil {
+				switch {
+				case errors.Is(err, handler.ErrorRecordNotFound):
+					panic(err)
+				default:
+					return err
+				}
+			}
+
+		case 3:
+			exit = true
+
+		default:
+			fmt.Printf("Invalid Choice\n\n")
+		}
+	}
+
+	return nil
+}
+

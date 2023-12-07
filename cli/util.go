@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"pair-project/pkg/validator"
+	"strconv"
 	"strings"
 )
 
@@ -258,6 +259,55 @@ func inputUpdateStreet(v *validator.Validator, prompt string) string {
 			fmt.Println(v.ShowError())
 		} else {
 			return input
+		}
+	}
+}
+
+/* ---------------------------------------------------------------- */
+/*                               basic                              */
+/* ---------------------------------------------------------------- */
+
+func inputUpdateString(v *validator.Validator, prompt string) string {
+	for {
+		v.Clear()
+		input, err := promptline(prompt)
+		if err != nil {
+			fmt.Println("err:", err)
+		}
+
+		if len(input) == 1 && input == "-" {
+			return input
+		}
+
+		input = strings.TrimSpace(input)
+
+		if ValidateStringNoSpecialChar(v, input); !v.Valid() {
+			fmt.Println(v.ShowError())
+		} else {
+			return input
+		}
+	}
+}
+
+func inputUpdateNumber(v *validator.Validator, prompt string) float64 {
+	for {
+		v.Clear()
+		input, err := promptline(prompt)
+		if err != nil {
+			fmt.Println("err:", err)
+		}
+
+		if len(input) == 1 && input == "-" {
+			return -1
+		}
+
+		input = strings.TrimSpace(input)
+
+		if ValidateNumber(v, input); !v.Valid() {
+			fmt.Println(v.ShowError())
+		} else {
+			num, _ := strconv.ParseFloat(input, 64)
+			return num
 		}
 	}
 }

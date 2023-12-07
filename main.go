@@ -308,7 +308,69 @@ func main() {
 									}
 								}
 							case 3:
-								fmt.Println("Update Produk")
+								var exit bool
+								for !exit {
+									cli.ShowAdminUpdateProductMenu()
+									updatechoice := cli.PromptChoice("Choice")
+
+									switch updatechoice {
+									case 1:
+										categories, err := handler.GetCategoriesProduct(db, entity.ProductClothes)
+										if err != nil {
+											fmt.Println(err)
+											fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+											continue
+										}
+
+										for {
+											cli.ShowAdminProductCategoriesMenu(categories)
+											categorychoice := cli.PromptChoice("Choice")
+
+											switch {
+											case categorychoice > 0 && categorychoice <= len(categories):
+												err = cli.HandleUpdateProductClothes(db, categorychoice, categories)
+												if err != nil {
+													fmt.Println(err)
+													fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+													continue
+												}
+											default:
+												fmt.Printf("Invalid Choice\n\n")
+											}
+										}
+									case 2:
+										categories, err := handler.GetCategoriesProduct(db, entity.ProductCostume)
+										if err != nil {
+											fmt.Println(err)
+											fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+											continue
+										}
+										for {
+											cli.ShowAdminProductCategoriesMenu(categories)
+											categorychoice := cli.PromptChoice("Choice")
+
+											switch {
+
+											case categorychoice > 0 && categorychoice <= len(categories):
+												err = cli.HandleUpdateProductCostume(db, categorychoice, categories)
+												if err != nil {
+													fmt.Println(err)
+													fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
+													continue
+												}
+											default:
+												fmt.Printf("Invalid Choice\n\n")
+											}
+										}
+
+									case 3:
+										exit = true
+									default:
+										fmt.Println("Invalid choice")
+									}
+
+								}
+
 							case 4:
 								productExit = true
 							default:
