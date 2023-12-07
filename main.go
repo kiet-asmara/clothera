@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	db, err := config.GetDB() 
+	db, err := config.GetDB()
 	if err != nil {
 		log.Fatal("Failed to connect")
 	}

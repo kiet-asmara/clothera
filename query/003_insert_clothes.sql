@@ -1,0 +1,10 @@
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('Kemeja Putih', 'Kemeja', 49.99, 50);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('Celana Jeans Biru', 'Celana', 29.99, 75);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('Hoodie Hitam', 'Hoodie', 39.99, 30);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('Jaket Denim', 'Jaket', 54.99, 40);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('T-Shirt Polos Putih', 'T-Shirt', 14.99, 120);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('Kemeja Batik', 'Kemeja', 64.99, 25);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('Celana Jogger Hitam', 'Celana', 34.99, 60);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('Hoodie Abu-abu', 'Hoodie', 44.99, 35);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('Jaket Kulit Hitam', 'Jaket', 74.99, 15);
+INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES ('T-Shirt Grafis', 'T-Shirt', 19.99, 90);

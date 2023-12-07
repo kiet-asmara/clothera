@@ -42,7 +42,7 @@ func ValidateStreet(v *validator.Validator, street string) {
 
 func ValidateStringNoSpecialChar(v *validator.Validator, input string) {
 	v.Check(input != "", "value", "must be provided")
-	v.Check(!strings.ContainsAny(input, " \n\t\r!@#$%^&*()_+-=?><';:{}[]|123456789"), "vlaue", "must not contain special character or number")
+	v.Check(!strings.ContainsAny(input, "\n\t\r!@#$%^&*()_+-=?><';:{}[]|123456789"), "vlaue", "must not contain special character or number")
 }
 
 func ValidateNumber(v *validator.Validator, input string) {
