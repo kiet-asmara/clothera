@@ -180,6 +180,7 @@ func main() {
 							switch productChoice {
 							case 1:
 								var addProdukAdmin int
+
 								exit3 := false
 
 								for !exit3 {
