@@ -8,7 +8,7 @@ import (
 var Categories []string // Global variable to store categories
 
 func ListCategory(db *sql.DB) {
-	query := "SELECT DISTINCT ClothesCategory FROM Clothes"
+	query := "SELECT DISTINCT ClothesCategory FROM clothes"
 	rows, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Error querying the database:", err)
@@ -41,7 +41,7 @@ func ListCategory(db *sql.DB) {
 }
 
 func DisplayClothesByCategory(db *sql.DB, selectedCategory string) []string {
-	query := "SELECT ClothesName FROM Clothes WHERE ClothesCategory = ?"
+	query := "SELECT ClothesName FROM clothes WHERE ClothesCategory = ?"
 	rows, err := db.Query(query, selectedCategory)
 	if err != nil {
 		fmt.Println("Error querying the database:", err)
