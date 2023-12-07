@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"pair-project/entity"
+	"strings"
 )
 
 // features:
@@ -22,6 +23,7 @@ func UserReportMenu(db *sql.DB) error {
 	if err != nil {
 		return fmt.Errorf("UserReportMenu: %w", err)
 	}
+	fmt.Println("")
 
 	switch choice {
 	case 1:
@@ -77,11 +79,12 @@ func RevenueCustomer(db *sql.DB) error {
 		customers = append(customers, c)
 	}
 
-	fmt.Printf("\nCustomerID | Customer Name | Total Spent\n")
-	fmt.Println("----------------------------------------------")
+	fmt.Println("Showing Total Revenue by Customer...")
+	fmt.Printf("\n%-15s %-20s %-15s\n", "CustomerID", "Customer Name", "Total Spent")
+	fmt.Println(strings.Repeat("-", 53))
 
 	for _, c := range customers {
-		fmt.Printf("     %d     |    %s    |    %.2f\n", c.ID, c.Name, c.Revenue)
+		fmt.Printf("%-15d %-20s%-15.2f\n", c.ID, c.Name, c.Revenue)
 	}
 	fmt.Println("")
 
@@ -115,11 +118,12 @@ func OrdersCustomer(db *sql.DB) error {
 		customers = append(customers, c)
 	}
 
-	fmt.Printf("\nCustomerID | Customer Name | Total Orders\n")
-	fmt.Println("----------------------------------------------")
+	fmt.Println("Showing Total Orders by Customer...")
+	fmt.Printf("\n%-15s %-20s %-15s\n", "CustomerID", "Customer Name", "Total Orders")
+	fmt.Println(strings.Repeat("-", 53))
 
 	for _, c := range customers {
-		fmt.Printf("     %d     |    %s    |    %d\n", c.ID, c.Name, c.OrderCount)
+		fmt.Printf("%-15d %-20s%-15d\n", c.ID, c.Name, c.OrderCount)
 	}
 	fmt.Println("")
 
