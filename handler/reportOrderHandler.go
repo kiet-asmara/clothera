@@ -4,20 +4,23 @@ import (
 	"database/sql"
 	"fmt"
 	"pair-project/entity"
+	"strings"
 )
 
 func OrderReportMenu(db *sql.DB) error {
-	fmt.Println("\n1 -> Total Revenue & Quantity Sold")
+	fmt.Println("1 -> Total Revenue & Quantity Sold")
 	fmt.Println("2 -> Rental Revenue by Costume")
 	fmt.Println("3 -> Sales Revenue by Clothes")
 	fmt.Println("4 -> Back to Main Menu")
+	fmt.Println("")
 
 	var choice int
-	fmt.Println("Choice: ")
+	fmt.Print("Choice: ")
 	_, err := fmt.Scan(&choice)
 	if err != nil {
 		return fmt.Errorf("OrderReportMenu: %w", err)
 	}
+	fmt.Println("")
 
 	switch choice {
 	case 1:
@@ -69,9 +72,13 @@ JOIN sales ON orders.OrderID = sales.OrderID`
 		}
 	}
 
-	fmt.Printf("\nTotal Products Sold | Total Rentals | Total Sales \n")
+	fmt.Println("Showing Total Quantity Sold...")
+	fmt.Printf("\n%-20s| %-15s| %-15s\n", "Total Products Sold", "Total Rentals", "Total Sales")
 	fmt.Println("--------------------------------------------------")
-	fmt.Printf("         %d         |       %d      |      %d \n\n", (rentQuantity + saleQuantity), rentQuantity, saleQuantity)
+	fmt.Printf("%-20d| %-15d| %-15d\n", (rentQuantity + saleQuantity), rentQuantity, saleQuantity)
+
+	fmt.Println("")
+	fmt.Println("")
 
 	return nil
 }
@@ -94,9 +101,12 @@ func AllRevenue(db *sql.DB) error {
 	}
 
 	// print
-	fmt.Printf("\nTotal Revenue | Rental Revenue | Sales Revenue \n")
+	fmt.Println("Showing Total Revenue...")
+	fmt.Printf("\n%-15s| %-15s| %-15s\n", "Total Revenue", "Rental Revenue", "Sales Revenue")
 	fmt.Println("-----------------------------------------------")
-	fmt.Printf("   %.2f    |     %.2f     |    %.2f \n\n", totalRev, rentRev, salesRev)
+	fmt.Printf("%-15.2f| %-15.2f| %-15.2f\n", totalRev, rentRev, salesRev)
+
+	fmt.Println("")
 
 	return nil
 }
@@ -189,12 +199,15 @@ GROUP BY costumes.CostumeName`
 		rentals = append(rentals, r)
 	}
 
-	fmt.Printf("\nCostume Name | Quantity | Total Revenue\n")
-	fmt.Println("----------------------------------------")
+	fmt.Println("Showing Rental Revenue by Costume...")
+	fmt.Printf("\n%-12s| %-18s| %-15s\n", "Costume", "Total Quantity", "Total Revenue")
+	fmt.Println(strings.Repeat("-", 50))
 
 	for _, r := range rentals {
-		fmt.Printf("%s   |   %d   |   %.2f\n", r.CostumeName, r.Quantity, r.TotalRevenue)
+		fmt.Printf("%-12s| %-18d| %-15.2f\n", r.CostumeName, r.Quantity, r.TotalRevenue)
 	}
+
+	fmt.Println("")
 	fmt.Println("")
 
 	return nil
@@ -227,12 +240,14 @@ ORDER BY TotalSalesPrice DESC`
 		sales = append(sales, s)
 	}
 
-	fmt.Printf("\nClothes Name | Quantity | Total Revenue\n")
-	fmt.Println("----------------------------------------")
+	fmt.Println("Showing Sales Revenue by Clothes...")
+	fmt.Printf("\n%-17s| %-12s| %-15s\n", "Clothes", "Quantity", "Total Revenue")
+	fmt.Println(strings.Repeat("-", 50))
 
 	for _, s := range sales {
-		fmt.Printf("%s   |   %d   |   %.2f\n", s.Name, s.Quantity, s.TotalRevenue)
+		fmt.Printf("%-17s| %-12d| %-15.2f\n", s.Name, s.Quantity, s.TotalRevenue)
 	}
+	fmt.Println("")
 	fmt.Println("")
 
 	return nil
