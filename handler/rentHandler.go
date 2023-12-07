@@ -19,6 +19,8 @@ func Rent(db *sql.DB, orderID int) (float64, error) {
 		return 1, nil
 	}
 
+	fmt.Println(rentDetail, mssg, err)
+
 	// reduce stock
 	err = ReduceStock(db, rentDetail.CostumeID, rentDetail.Quantity)
 	if err != nil {
