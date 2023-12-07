@@ -10,7 +10,7 @@ import (
 
 func InsertAddress(db *sql.DB, param *entity.Address) error {
 	query := `
-		INSERT INTO address(AddressCountry, AddressCity, AddressStreet)
+		INSERT INTO Address(AddressCountry, AddressCity, AddressStreet)
 		VALUES (?, ?, ?)
 	`
 

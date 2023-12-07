@@ -51,11 +51,11 @@ func OrderReportMenu(db *sql.DB) error {
 
 func TotalQuantity(db *sql.DB) error {
 	query := `SELECT
-	SUM(rents.Quantity) AS rentQuantity,
-    SUM(sales.Quantity) AS saleQuantity
-FROM orders
-JOIN rents ON orders.OrderID = rents.OrderID
-JOIN sales ON orders.OrderID = sales.OrderID`
+	SUM(Rents.Quantity) AS rentQuantity,
+    SUM(Sales.Quantity) AS saleQuantity
+	FROM Orders
+	JOIN Rents ON Orders.OrderID = Rents.OrderID
+	JOIN Sales ON Orders.OrderID = Sales.OrderID`
 
 	rows, err := db.Query(query)
 	if err != nil {
@@ -112,7 +112,7 @@ func AllRevenue(db *sql.DB) error {
 }
 
 func TotalRevenue(db *sql.DB) (float64, error) {
-	query := `SELECT SUM(orders.totalPrice) AS totalRevenue FROM orders`
+	query := `SELECT SUM( Orders.TotalPrice) AS totalRevenue FROM Orders`
 
 	rows, err := db.Query(query)
 	if err != nil {
@@ -132,7 +132,7 @@ func TotalRevenue(db *sql.DB) (float64, error) {
 }
 
 func TotalRentRevenue(db *sql.DB) (float64, error) {
-	query := `SELECT SUM(rents.rentPrice) AS totalRentRevenue FROM rents`
+	query := `SELECT SUM(Rents.RentPrice) AS totalRentRevenue FROM Rents`
 
 	rows, err := db.Query(query)
 	if err != nil {
@@ -152,8 +152,8 @@ func TotalRentRevenue(db *sql.DB) (float64, error) {
 }
 
 func TotalSalesRevenue(db *sql.DB) (float64, error) {
-	query := `SELECT SUM(sales.Quantity*clothes.ClothesPrice) AS totalSalesRevenue
-				FROM sales JOIN clothes ON sales.ClothesID = clothes.ClothesID`
+	query := `SELECT SUM(Sales.Quantity*Clothes.ClothesPrice) AS totalSalesRevenue
+	FROM Sales JOIN Clothes ON Sales.ClothesID = Clothes.ClothesID`
 
 	rows, err := db.Query(query)
 	if err != nil {
@@ -174,13 +174,13 @@ func TotalSalesRevenue(db *sql.DB) (float64, error) {
 
 func RentalRevenueByCostume(db *sql.DB) error {
 	query := `SELECT 
-	costumes.CostumeName, 
-	SUM(rents.Quantity) AS Quantity, 
-	SUM(rents.RentPrice) AS TotalRentPrice
-FROM rents
-JOIN costumes ON rents.CostumeID = costumes.CostumeID
-JOIN orders ON rents.OrderID = orders.OrderID
-GROUP BY costumes.CostumeName`
+	Costumes.CostumeName, 
+	SUM(Rents.Quantity) AS Quantity, 
+	SUM(Rents.RentPrice) AS TotalRentPrice
+	FROM Rents
+	JOIN Costumes ON Rents.CostumeID = Costumes.CostumeID
+	JOIN Orders ON Rents.OrderID = Orders.OrderID
+	GROUP BY Costumes.CostumeName`
 
 	rows, err := db.Query(query)
 	if err != nil {
@@ -215,13 +215,13 @@ GROUP BY costumes.CostumeName`
 
 func SalesRevenueByClothes(db *sql.DB) error {
 	query := `SELECT 
-    clothes.ClothesName, 
-	(sales.Quantity) AS Quantity, 
-	SUM(sales.Quantity*clothes.ClothesPrice) AS TotalSalesPrice
-FROM sales
-JOIN clothes ON sales.ClothesID = clothes.ClothesID
-GROUP BY sales.ClothesID
-ORDER BY TotalSalesPrice DESC`
+    Clothes.ClothesName, 
+	(Sales.Quantity) AS Quantity, 
+	SUM(Sales.Quantity*Clothes.ClothesPrice) AS TotalSalesPrice
+	FROM Sales
+	JOIN Clothes ON Sales.ClothesID = Clothes.ClothesID
+	GROUP BY Sales.ClothesID
+	ORDER BY TotalSalesPrice DESC`
 
 	rows, err := db.Query(query)
 	if err != nil {

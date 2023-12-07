@@ -11,7 +11,7 @@ import (
 func GetCustomerByEmail(db *sql.DB, email string) (*entity.Customer, error) {
 	query := `
 		SELECT CustomerID, AddressID, CustomerName, CustomerEmail, CustomerPassword, CustomerType
-		FROM customers
+		FROM Customers
 		WHERE CustomerEmail = ?
 		LIMIT 1
 	`

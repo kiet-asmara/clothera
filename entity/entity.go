@@ -6,11 +6,11 @@ type Product struct {
 }
 
 var ProductClothes = Product{
-	Types:    "clothes",
+	Types:    "Clothes",
 	Category: "ClothesCategory",
 }
 
 var ProductCostume = Product{
-	Types:    "costumes",
+	Types:    "Costumes",
 	Category: "CostumeCategory",
 }

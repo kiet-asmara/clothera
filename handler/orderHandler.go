@@ -9,7 +9,7 @@ import (
 
 func CreateOrder(db *sql.DB, customerID int) (int, error) {
 	// create order
-	query := `INSERT INTO orders (CustomerID, orderDate) VALUES
+	query := `INSERT INTO Orders (CustomerID, OrderDate) VALUES
 	(?,?)`
 
 	orderDate := time.Now().Format("2006-01-02")
@@ -20,7 +20,7 @@ func CreateOrder(db *sql.DB, customerID int) (int, error) {
 	}
 
 	// get order ID
-	query = `SELECT orderID FROM orders ORDER BY orderID DESC LIMIT 1`
+	query = `SELECT OrderID FROM Orders ORDER BY OrderID DESC LIMIT 1`
 	rows, err := db.Query(query)
 	if err != nil {
 		return 0, err
@@ -59,7 +59,7 @@ func CalcDiscount(totalPrice float64) float64 {
 }
 
 func InsertTotal(db *sql.DB, total float64, orderID int) error {
-	query := `UPDATE orders
+	query := `UPDATE Orders
 	SET TotalPrice = ?
 	WHERE OrderID = ?`
 
@@ -86,13 +86,13 @@ func ListPesanan(db *sql.DB, orderID int) error {
 
 func ListRental(db *sql.DB, orderID int) error {
 	query := `SELECT
-	costumes.CostumeName,
-    rents.Quantity,
-    rents.RentPrice
-FROM rents
-JOIN costumes ON rents.CostumeID = costumes.CostumeID
-WHERE rents.OrderID = ?
-GROUP BY rents.CostumeID`
+	Costumes.CostumeName,
+    Rents.Quantity,
+    Rents.RentPrice
+	FROM Rents
+	JOIN Costumes ON Rents.CostumeID = Costumes.CostumeID
+	WHERE Rents.OrderID = ?
+	GROUP BY Rents.CostumeID`
 
 	rows, err := db.Query(query, orderID)
 	if err != nil {
@@ -120,13 +120,13 @@ GROUP BY rents.CostumeID`
 
 func ListSales(db *sql.DB, orderID int) error {
 	query := `SELECT
-	clothes.ClothesName,
-    (sales.Quantity) AS Quantity,
-    (clothes.ClothesPrice * sales.Quantity) AS TotalPrice
-	FROM sales
-	JOIN clothes ON sales.ClothesID = clothes.ClothesID
-	WHERE sales.OrderID = ?
-    GROUP BY clothes.ClothesName`
+	Clothes.ClothesName,
+    (Sales.Quantity) AS Quantity,
+    (Clothes.ClothesPrice * Sales.Quantity) AS TotalPrice
+	FROM Sales
+	JOIN Clothes ON Sales.ClothesID = Clothes.ClothesID
+	WHERE Sales.OrderID = ?
+    GROUP BY Clothes.ClothesName`
 
 	rows, err := db.Query(query, orderID)
 	if err != nil {
