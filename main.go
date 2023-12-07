@@ -37,7 +37,8 @@ func main() {
 					fmt.Printf("Sorry your crendential is not valid. Please try again!\n\n")
 					continue
 				}
-				fmt.Printf("Login Success\n\n")
+
+				fmt.Printf("\n|--Login Success--|\n\n\n")
 			}
 
 			exit2 := false
@@ -125,7 +126,7 @@ func main() {
 						}
 
 					case 2:
-						fmt.Println("--------------")
+						fmt.Println("\n--------------")
 						fmt.Println("Rental Pakaian")
 						fmt.Println("--------------")
 
@@ -147,7 +148,7 @@ func main() {
 							log.Fatalln(err)
 						}
 
-						fmt.Printf("\nRental price: %.2f\n", price)
+						fmt.Printf("Rental price: %.2f\n", price)
 
 						// add to total
 						totalPrice += price
@@ -225,6 +226,7 @@ func main() {
 					cli.ShowAdminMenu()
 					fmt.Print("Choice: ")
 					fmt.Scan(&choiceCustomer)
+					fmt.Println("")
 
 					switch choiceCustomer {
 					case 1:
@@ -257,6 +259,7 @@ func main() {
 							cli.ShowAdminReportMenu()
 							fmt.Print("Choice: ")
 							fmt.Scan(&productChoice)
+							fmt.Println(" ")
 
 							switch productChoice {
 							case 1:
@@ -278,10 +281,7 @@ func main() {
 								if err != nil {
 									log.Fatalln(err)
 								}
-
 							case 3:
-								fmt.Println("Stock Report")
-							case 4:
 								productExit = true
 							default:
 								fmt.Println("Invalid choice")
