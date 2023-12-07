@@ -25,7 +25,8 @@ func ShowMainMenu() {
 
 	fmt.Println("1 -> Login")
 	fmt.Println("2 -> Register")
-	fmt.Println("3 -> Exit\n")
+	fmt.Println("3 -> Exit")
+	fmt.Println("")
 }
 
 func ShowCustomerMenu() {
@@ -37,7 +38,8 @@ func ShowCustomerMenu() {
 	fmt.Println("2 -> Rental Pakaian")
 	fmt.Println("3 -> Pesanan")
 	fmt.Println("4 -> Profile")
-	fmt.Println("5 -> Back to Main Menu\n")
+	fmt.Println("5 -> Back to Main Menu")
+	fmt.Println("")
 }
 
 func ShowAdminMenu() {
@@ -47,14 +49,20 @@ func ShowAdminMenu() {
 
 	fmt.Println("1 -> Produk")
 	fmt.Println("2 -> Report")
-	fmt.Println("3 -> Back to Main Menu\n")
+	fmt.Println("3 -> Back to Main Menu")
+	fmt.Println("")
 }
 
 func ShowAdminProdukMenu() {
+	fmt.Println("-------------")
+	fmt.Println("Products Menu")
+	fmt.Println("-------------")
+
 	fmt.Println("1 -> Add Produk")
 	fmt.Println("2 -> Delete Produk")
 	fmt.Println("3 -> Update Produk")
-	fmt.Println("4 -> Back\n")
+	fmt.Println("4 -> Back")
+	fmt.Println("")
 }
 
 func ShowAdminReportMenu() {
@@ -64,13 +72,19 @@ func ShowAdminReportMenu() {
 
 	fmt.Println("1 -> User Report")
 	fmt.Println("2 -> Order Report")
-	fmt.Println("3 -> Back\n")
+	fmt.Println("3 -> Back")
+	fmt.Println("")
 }
 
 func ShowProfileMenu() {
+	fmt.Println("------------")
+	fmt.Println("Profile Menu")
+	fmt.Println("------------")
+
 	fmt.Println("1 -> Show Profile")
 	fmt.Println("2 -> Edit Profile")
-	fmt.Println("3 -> Back\n")
+	fmt.Println("3 -> Back")
+	fmt.Println("")
 }
 
 func PromptChoice(prompt string) int {
