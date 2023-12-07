@@ -27,14 +27,14 @@ CREATE TABLE `Costumes` (
   `CostumeName` VARCHAR(100) NOT NULL,
   `CostumeCategory` ENUM('Cosplay', 'Formal') NOT NULL,
   `CostumePrice` DECIMAL(10,2) NOT NULL CHECK(`CostumePrice` >= 0),
-  `CostumeStock` INT NOT NULL CHECK(`CostumeStock` >= 0);
+  `CostumeStock` INT NOT NULL CHECK(`CostumeStock` >= 0)
 );
 
 CREATE TABLE `Orders` (
   `OrderID` INT PRIMARY KEY AUTO_INCREMENT,
   `CustomerID` INT NOT NULL,
   `OrderDate` DATE NOT NULL,
-  `TotalPrice` INT CHECK(`TotalPrice` >= 0);
+  `TotalPrice` INT CHECK(`TotalPrice` >= 0)
 );
 
 CREATE TABLE `Sales` (
@@ -51,7 +51,7 @@ CREATE TABLE `Rents` (
   `Quantity` INT NOT NULL CHECK(`Quantity` >= 0),
   `StartDate` DATE NOT NULL,
   `EndDate` DATE NOT NULL,
-  `RentPrice` DEC(10,2) NOT NULL CHECK(`RentPrice` >= 0);
+  `RentPrice` DEC(10,2) NOT NULL CHECK(`RentPrice` >= 0)
 );
 
 ALTER TABLE `Customers` ADD FOREIGN KEY (`AddressID`) REFERENCES `Address` (`AddressID`);
