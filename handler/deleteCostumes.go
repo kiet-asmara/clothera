@@ -12,12 +12,11 @@ func ShowProductsByCategoryCostumes(db *sql.DB) {
 	// ...
 
 	var categoryToDisplay string
-	fmt.Print("Enter the category to display: ")
+	fmt.Print("Enter the category to display (type category name): ")
 	fmt.Scan(&categoryToDisplay)
 
 	// Gunakan db.Query untuk mendapatkan data dari database
 	rows, err := db.Query("SELECT * FROM costumes WHERE CostumeCategory = ?", categoryToDisplay)
-
 
 	if err != nil {
 		log.Fatal(err)
