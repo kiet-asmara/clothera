@@ -51,6 +51,10 @@ func ShowAdminMenu() {
 }
 
 func ShowAdminProdukMenu() {
+	fmt.Println("-------------")
+	fmt.Println("Products Menu")
+	fmt.Println("-------------")
+
 	fmt.Println("1 -> Add Produk")
 	fmt.Println("2 -> Delete Produk")
 	fmt.Println("3 -> Update Produk")
@@ -68,6 +72,10 @@ func ShowAdminReportMenu() {
 }
 
 func ShowProfileMenu() {
+	fmt.Println("------------")
+	fmt.Println("Profile Menu")
+	fmt.Println("------------")
+
 	fmt.Println("1 -> Show Profile")
 	fmt.Println("2 -> Edit Profile")
 	fmt.Println("3 -> Back\n")
