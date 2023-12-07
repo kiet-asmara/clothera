@@ -27,7 +27,7 @@ func AddClothes(db *sql.DB, clothes entity.Clothes, customer entity.Customer, or
 		}
 
 		saleQuery := `
-			INSERT INTO sales (OrderID, ClothesID, Quantity)
+			INSERT INTO Sales (OrderID, ClothesID, Quantity)
 			VALUES (?, ?, ?)
 		`
 		_, err = db.Exec(saleQuery, orderID, clothes.ClothesID, quantity)
@@ -48,7 +48,7 @@ func AddClothes(db *sql.DB, clothes entity.Clothes, customer entity.Customer, or
 func CheckClothesAvailability(db *sql.DB, clothesID int, quantity int) (bool, error) {
 	stockQuery := `
 		SELECT ClothesStock
-		FROM clothes
+		FROM Clothes
 		WHERE ClothesID = ?
 	`
 	var stock int
@@ -62,7 +62,7 @@ func CheckClothesAvailability(db *sql.DB, clothesID int, quantity int) (bool, er
 
 func UpdateStock(db *sql.DB, clothesID int, quantity int) error {
 	updateStockQuery := `
-		UPDATE clothes
+		UPDATE Clothes
 		SET ClothesStock = ClothesStock - ?
 		WHERE ClothesID = ?
 	`
@@ -78,7 +78,7 @@ func UpdateStock(db *sql.DB, clothesID int, quantity int) error {
 func GetClothesByID(db *sql.DB, clothesID int) (*entity.Clothes, error) {
 	query := `
 		SELECT ClothesID, ClothesName, ClothesCategory, ClothesPrice, ClothesStock
-		FROM clothes
+		FROM Clothes
 		WHERE ClothesID = ?
 	`
 
@@ -98,7 +98,7 @@ func GetClothesByID(db *sql.DB, clothesID int) (*entity.Clothes, error) {
 }
 
 func ByName(db *sql.DB, clothesName string) (int, error) {
-	query := `SELECT ClothesID FROM clothes WHERE ClothesName = ?`
+	query := `SELECT ClothesID FROM Clothes WHERE ClothesName = ?`
 	var clothesID int
 	err := db.QueryRow(query, clothesName).Scan(&clothesID)
 
@@ -110,7 +110,7 @@ func ByName(db *sql.DB, clothesName string) (int, error) {
 }
 
 func GetPriceClothes(db *sql.DB, clothesID int) (float64, error) {
-	query := `SELECT ClothesPrice FROM clothes WHERE ClothesID = ?`
+	query := `SELECT ClothesPrice FROM Clothes WHERE ClothesID = ?`
 
 	var clothesPrice float64
 	err := db.QueryRow(query, clothesID).Scan(&clothesPrice)

@@ -16,7 +16,7 @@ func GetAllCostumeByCategory(db *sql.DB, category string) ([]*entity.Costume, er
 			CostumePrice,
 			CostumeStock
 		FROM
-			costumes
+			Costumes
 		WHERE 
 			CostumeCategory = ?
 		

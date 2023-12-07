@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	db, err := config.GetDB("root:@tcp(127.0.0.1:3306)/clothera")
+	db, err := config.GetDB() 
 	if err != nil {
 		log.Fatal("Failed to connect")
 	}
@@ -322,8 +322,9 @@ func main() {
 											continue
 										}
 
-										for {
-											cli.ShowAdminProductCategoriesMenu(categories)
+										var exit bool
+										for !exit {
+											cli.ShowAdminProductCategoriesMenu(categories, entity.ProductClothes)
 											categorychoice := cli.PromptChoice("Choice")
 
 											switch {
@@ -334,6 +335,10 @@ func main() {
 													fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
 													continue
 												}
+
+											case categorychoice == len(categories)+1:
+												exit = true
+
 											default:
 												fmt.Printf("Invalid Choice\n\n")
 											}
@@ -341,23 +346,25 @@ func main() {
 									case 2:
 										categories, err := handler.GetCategoriesProduct(db, entity.ProductCostume)
 										if err != nil {
-											fmt.Println(err)
 											fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
 											continue
 										}
-										for {
-											cli.ShowAdminProductCategoriesMenu(categories)
+										var exit bool
+										for !exit {
+											cli.ShowAdminProductCategoriesMenu(categories, entity.ProductCostume)
 											categorychoice := cli.PromptChoice("Choice")
 
 											switch {
-
 											case categorychoice > 0 && categorychoice <= len(categories):
 												err = cli.HandleUpdateProductCostume(db, categorychoice, categories)
 												if err != nil {
-													fmt.Println(err)
 													fmt.Printf("Sorry We Have Problem in our server. Please Try Again!\n\n")
 													continue
 												}
+
+											case categorychoice == len(categories)+1:
+												exit = true
+
 											default:
 												fmt.Printf("Invalid Choice\n\n")
 											}
