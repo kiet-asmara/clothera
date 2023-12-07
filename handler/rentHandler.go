@@ -16,7 +16,7 @@ func Rent(db *sql.DB, orderID int) (float64, error) {
 	} else if mssg != "" {
 		fmt.Println(mssg)
 		fmt.Println("")
-		return 0, nil
+		return 1, nil
 	}
 
 	// reduce stock
@@ -74,7 +74,7 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 	// check date
 	days := DaysBetween(start, end)
 	if days == 0 {
-		return entity.Rent{}, "", fmt.Errorf("rentMenu: %w", err)
+		return entity.Rent{}, " ", nil
 	}
 
 	rental := entity.Rent{
