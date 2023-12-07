@@ -126,10 +126,8 @@ func main() {
 						fmt.Println("Rental Pakaian")
 						fmt.Println("--------------")
 
-						// tampilkan kategori
+						// tampilkan kategori & produk
 						kategori := handler.CategoryCostume()
-
-						// tampilkan list produk
 						err := handler.ListCostumes(db, kategori)
 						if err != nil {
 							log.Fatalln(err)
@@ -137,7 +135,7 @@ func main() {
 
 						// rent function
 						price, err := handler.Rent(db, orderID)
-						if price == 0 {
+						if price == 1 {
 							continue // if out of stock
 						}
 						if err != nil {
@@ -154,9 +152,11 @@ func main() {
 						fmt.Println("--------")
 						fmt.Println("Pesanan")
 						fmt.Println("--------")
+
 						// check if totalprice = 0
 						if totalPrice == 0 {
 							fmt.Println("Order is empty. Total price is $0.00")
+							fmt.Println("")
 							continue
 						}
 
@@ -169,7 +169,7 @@ func main() {
 						// hitung diskon & pajak
 						fmt.Println("------------------------------------")
 						totalPrice = handler.CalcDiscount(totalPrice)
-						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n", totalPrice)
+						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n\n", totalPrice)
 
 						// insert total price ke tabel orders
 						err = handler.InsertTotal(db, totalPrice, orderID)
