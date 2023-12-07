@@ -9,9 +9,9 @@ import (
 
 const (
 	dbUser     = "root"
-	dbPassword = "a341CgeH16HbaGAHBdBfB3BdHagGggEg"
-	dbHost     = "roundhouse.proxy.rlwy.net"
-	dbPort     = "38992"
+	dbPassword = "bE3eF4EDf5-gacEGEh2E43eB3AEG2daE"
+	dbHost     = "viaduct.proxy.rlwy.net"
+	dbPort     = "38725"
 	dbName     = "railway"
 	// local      = "root:@tcp(127.0.0.1:3306)/clothera"
 )
