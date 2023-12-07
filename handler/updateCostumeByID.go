@@ -10,7 +10,7 @@ import (
 
 func UpdateCostumeByID(db *sql.DB, costume *entity.Costume) error {
 	query := `
-		UPDATE costumes
+		UPDATE Costumes
 		SET 
 			CostumeName = ?,
 			CostumeCategory = ?,

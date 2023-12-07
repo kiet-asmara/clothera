@@ -89,7 +89,7 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 }
 
 func RentInsert(db *sql.DB, rent entity.Rent, price float64) error {
-	query := `INSERT INTO rents (orderid,costumeid,quantity,startdate,enddate,RentPrice) VALUES
+	query := `INSERT INTO Rents (OrderID, CostumeID, Quantity, StartDate, EndDate, RentPrice) VALUES
 	(?,?,?,?,?,?)`
 
 	_, err := db.Exec(query, rent.OrderID, rent.CostumeID, rent.Quantity, rent.StartDate, rent.EndDate, price)
@@ -103,10 +103,10 @@ func RentInsert(db *sql.DB, rent entity.Rent, price float64) error {
 func RentPrice(db *sql.DB, rent entity.Rent) (float64, error) {
 	// get price per day
 	query := `SELECT
-	costumes.CostumePrice
-FROM costumes
-JOIN rents ON costumes.CostumeID = rents.CostumeID
-WHERE costumes.costumeID = ?`
+	Costumes.CostumePrice
+	FROM Costumes
+	JOIN Rents ON Costumes.CostumeID = Rents.CostumeID
+	WHERE Costumes.CostumeID = ?`
 
 	rows, err := db.Query(query, rent.CostumeID)
 	if err != nil {
@@ -164,9 +164,9 @@ func DaysBetween(start, end string) int {
 
 func CostumeStock(db *sql.DB, costumeID int, quantity int) (int, error) {
 	query := `SELECT
-	costumes.CostumeStock
-FROM costumes
-WHERE costumes.CostumeID = ?`
+	Costumes.CostumeStock
+	FROM Costumes
+	WHERE Costumes.CostumeID = ?`
 
 	// get costume stock
 	rows, err := db.Query(query, costumeID)
@@ -194,7 +194,7 @@ WHERE costumes.CostumeID = ?`
 }
 
 func ReduceStock(db *sql.DB, costumeID int, quantity int) error {
-	query := `UPDATE costumes
+	query := `UPDATE Costumes
 	SET CostumeStock = CostumeStock - ?
 	WHERE CostumeID = ?`
 

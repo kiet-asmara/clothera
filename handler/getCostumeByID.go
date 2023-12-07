@@ -9,7 +9,7 @@ import (
 func GetCostumeByID(db *sql.DB, costumeID int) (*entity.Costume, error) {
 	query := `
 		SELECT CostumeID, CostumeName, CostumeCategory, CostumePrice, CostumeStock
-		FROM costumes
+		FROM Costumes
 		WHERE CostumeID = ?
 	`
 

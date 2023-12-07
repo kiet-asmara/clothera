@@ -54,13 +54,13 @@ func UserReportMenu(db *sql.DB) error {
 
 func RevenueCustomer(db *sql.DB) error {
 	query := `SELECT
-	customers.CustomerID,
-    customers.CustomerName,
-    SUM(orders.totalPrice) AS revenue
-	FROM customers
-	JOIN orders ON customers.CustomerID = orders.CustomerID
+	Customers.CustomerID,
+    Customers.CustomerName,
+    SUM(Orders.TotalPrice) AS revenue
+	FROM Customers
+	JOIN Orders ON Customers.CustomerID = Orders.CustomerID
     WHERE CustomerType = 'user'
-	GROUP BY orders.CustomerID
+	GROUP BY Orders.CustomerID
 	ORDER BY revenue DESC`
 
 	rows, err := db.Query(query)
@@ -94,13 +94,13 @@ func RevenueCustomer(db *sql.DB) error {
 
 func OrdersCustomer(db *sql.DB) error {
 	query := `SELECT
-	customers.CustomerID,
-    customers.CustomerName,
-    COUNT(orders.OrderID) AS OrderCount
-	FROM orders
-	JOIN customers ON customers.CustomerID = orders.CustomerID
+	Customers.CustomerID,
+    Customers.CustomerName,
+    COUNT(Orders.OrderID) AS OrderCount
+	FROM Orders
+	JOIN Customers ON Customers.CustomerID = Orders.CustomerID
     WHERE CustomerType = 'user'
-	GROUP BY orders.CustomerID`
+	GROUP BY Orders.CustomerID`
 
 	rows, err := db.Query(query)
 	if err != nil {

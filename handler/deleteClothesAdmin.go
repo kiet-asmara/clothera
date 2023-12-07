@@ -16,7 +16,7 @@ func ShowProductsByCategory(db *sql.DB) {
 	fmt.Scan(&categoryToDisplay)
 
 	// Gunakan db.Query untuk mendapatkan data dari database
-	rows, err := db.Query("SELECT * FROM clothes WHERE ClothesCategory = ?", categoryToDisplay)
+	rows, err := db.Query("SELECT * FROM Clothes WHERE ClothesCategory = ?", categoryToDisplay)
 
 	if err != nil {
 		log.Fatal(err)
@@ -52,7 +52,7 @@ func DeleteProduct(db *sql.DB) {
 
 	// Mengecek apakah ada penjualan terkait produk yang akan dihapus
 	var salesCount int
-	err := db.QueryRow("SELECT COUNT(*) FROM sales WHERE ClothesID = ?", idToDelete).Scan(&salesCount)
+	err := db.QueryRow("SELECT COUNT(*) FROM Sales WHERE ClothesID = ?", idToDelete).Scan(&salesCount)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +64,7 @@ func DeleteProduct(db *sql.DB) {
 	}
 
 	// Gunakan db.Exec untuk menghapus data dari database jika tidak ada penjualan terkait
-	result, err := db.Exec("DELETE FROM clothes WHERE ClothesID = ?", idToDelete)
+	result, err := db.Exec("DELETE FROM Clothes WHERE ClothesID = ?", idToDelete)
 
 	if err != nil {
 		log.Fatal(err)

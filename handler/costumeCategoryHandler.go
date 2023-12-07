@@ -26,9 +26,7 @@ func CategoryCostume() string {
 }
 
 func ListCostumes(db *sql.DB, category string) error {
-	query := `SELECT
-	*
-FROM costumes WHERE CostumeCategory = ?`
+	query := `SELECT * FROM Costumes WHERE CostumeCategory = ?`
 
 	rows, err := db.Query(query, category)
 	if err != nil {
