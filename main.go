@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"pair-project/cli"
 	"pair-project/config"
 	"pair-project/entity"
@@ -38,7 +37,8 @@ func main() {
 					fmt.Printf("Sorry your crendential is not valid. Please try again!\n\n")
 					continue
 				}
-				fmt.Printf("Login Success\n\n")
+
+				fmt.Printf("\n|--Login Success--|\n\n\n")
 			}
 
 			exit2 := false
@@ -107,11 +107,7 @@ func main() {
 											log.Fatal(err)
 										}
 
-										fmt.Print("Enter the quantity: ")
-										var quantity int
-										fmt.Scan(&quantity)
-
-										err = handler.AddClothes(db, *selectedClothes, *customer, orderID, quantity)
+										quantity, err := handler.AddClothes(db, *selectedClothes, *customer, orderID)
 										if err != nil {
 											log.Fatal(err)
 										}
@@ -126,41 +122,61 @@ func main() {
 						}
 
 					case 2:
+						fmt.Println("\n--------------")
 						fmt.Println("Rental Pakaian")
-						// tampilkan kategori
-						kategori := handler.CategoryCostume()
+						fmt.Println("--------------")
 
-						// tampilkan list produk
+						// tampilkan kategori & produk
+						kategori := handler.CategoryCostume()
 						err := handler.ListCostumes(db, kategori)
 						if err != nil {
-							log.Fatal(err)
+							log.Fatalln(err)
 						}
 
-						// input: costumeid, quantity, enddate
+						// rent function
 						price, err := handler.Rent(db, orderID)
-						if price == 0 {
+						if price == 1 {
 							continue // if out of stock
 						}
 						if err != nil {
-							log.Fatal(err)
+							log.Fatalln(err)
 						}
-						fmt.Println("price:", price)
+
+						fmt.Printf("Rental price: %.2f\n", price)
+
+						// add to total
 						totalPrice += price
-						fmt.Printf("\nYour total is now: $%.2f\n\n", totalPrice)
+						fmt.Printf("\nYour total is now: $%.2f\n", totalPrice)
 					case 3:
+						fmt.Println("")
+						fmt.Println("--------")
 						fmt.Println("Pesanan")
+						fmt.Println("--------")
+
+						// check if totalprice = 0
+						if totalPrice == 0 {
+							fmt.Println("Order is empty. Total price is $0.00")
+							fmt.Println("")
+							continue
+						}
+
 						// list barang pesanan
+						err := handler.ListPesanan(db, orderID)
+						if err != nil {
+							log.Fatalln(err)
+						}
 
 						// hitung diskon & pajak
+						fmt.Println("------------------------------------")
 						totalPrice = handler.CalcDiscount(totalPrice)
-						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n", totalPrice)
+						fmt.Printf("Your total with tax (11%%) is: $%.2f.\n\n", totalPrice)
 
 						// insert total price ke tabel orders
-						err := handler.InsertTotal(db, totalPrice, orderID)
+						err = handler.InsertTotal(db, totalPrice, orderID)
 						if err != nil {
-							log.Fatal(err)
+							log.Fatalln(err)
 						}
-						os.Exit(1)
+						return
 
 					// Update Profile
 					case 4:
@@ -206,6 +222,7 @@ func main() {
 					cli.ShowAdminMenu()
 					fmt.Print("Choice: ")
 					fmt.Scan(&choiceCustomer)
+					fmt.Println("")
 
 					switch choiceCustomer {
 					case 1:
@@ -219,9 +236,77 @@ func main() {
 
 							switch productChoice {
 							case 1:
-								fmt.Println("Add Produk")
+								var addProdukAdmin int
+
+								exit3 := false
+
+								for !exit3 {
+									cli.ShowAdminAddProductMenu()
+									fmt.Print("Choice: ")
+									fmt.Scan(&addProdukAdmin)
+
+									switch addProdukAdmin {
+									case 1:
+										categories := handler.FetchAllCategoriesFromDatabase(db)
+										handler.PrintCategoriesClothes(categories)
+
+										selectedCategory := handler.GetSelectedCategoryFromUser(categories)
+
+										newProductClothes := handler.GetProductDetailsFromAdmin(selectedCategory)
+
+										err := handler.InsertProductIntoDatabase(db, newProductClothes)
+										if err != nil {
+											fmt.Println("Error adding product:", err)
+										} else {
+											fmt.Println("Product added successfully!")
+										}
+									case 2:
+										categories := handler.FetchAllCategoriesFromDatabaseCostumes(db)
+										handler.PrintCategoriesCostumes(categories)
+
+										selectedCategory := handler.GetSelectedCategoryFromUserCostumes(categories)
+
+										newProductCostumes := handler.GetProductDetailsFromAdminCostumes(selectedCategory)
+
+										err := handler.InsertProductIntoDatabaseCostumes(db, newProductCostumes)
+										if err != nil {
+											fmt.Println("Error adding product:", err)
+										} else {
+											fmt.Println("Product added successfully!")
+										}
+									case 3:
+										exit3 = true
+									default:
+										fmt.Println("Invalid choice")
+									}
+								}
+
 							case 2:
-								fmt.Println("Delete Produk")
+								var addProdukAdmin int
+								exit3 := false
+
+								for !exit3 {
+									cli.ShowAdminAddProductMenu()
+									fmt.Print("Choice: ")
+									fmt.Scan(&addProdukAdmin)
+
+									switch addProdukAdmin {
+									case 1:
+										categories := handler.FetchAllCategoriesFromDatabase(db)
+										fmt.Println("Available Categories:", categories)
+										handler.ShowProductsByCategory(db)
+										handler.DeleteProduct(db)
+									case 2:
+										categories := handler.FetchAllCategoriesFromDatabaseCostumes(db)
+										fmt.Println("Available Categories:", categories)
+										handler.ShowProductsByCategoryCostumes(db)
+										handler.DeleteProductCostumes(db)
+									case 3:
+										exit3 = true
+									default:
+										fmt.Println("Invalid choice")
+									}
+								}
 							case 3:
 								fmt.Println("Update Produk")
 							case 4:
@@ -238,24 +323,29 @@ func main() {
 							cli.ShowAdminReportMenu()
 							fmt.Print("Choice: ")
 							fmt.Scan(&productChoice)
+							fmt.Println(" ")
 
 							switch productChoice {
 							case 1:
+								fmt.Println("-----------")
 								fmt.Println("User Report")
-							case 2:
-								fmt.Println("Order Report")
-								err := handler.TotalQuantity(db)
+								fmt.Println("-----------")
+
+								err := handler.UserReportMenu(db)
 								if err != nil {
-									log.Fatal(err)
+									log.Fatalln(err)
 								}
 
-								err = handler.RentalRevenueByCostume(db)
+							case 2:
+								fmt.Println("------------")
+								fmt.Println("Order Report")
+								fmt.Println("------------")
+
+								err := handler.OrderReportMenu(db)
 								if err != nil {
-									log.Fatal(err)
+									log.Fatalln(err)
 								}
 							case 3:
-								fmt.Println("Stock Report")
-							case 4:
 								productExit = true
 							default:
 								fmt.Println("Invalid choice")

@@ -1,7 +1,6 @@
 package cli
 
 import (
-
 	"errors"
 	"pair-project/pkg/table"
 
@@ -19,46 +18,80 @@ import (
 )
 
 func ShowMainMenu() {
+	fmt.Println("")
+	fmt.Println("---------")
+	fmt.Println("Main Menu")
+	fmt.Println("---------")
+
 	fmt.Println("1 -> Login")
 	fmt.Println("2 -> Register")
-	fmt.Println("3 -> Exit\n")
+	fmt.Println("3 -> Exit")
+	fmt.Println("")
 }
 
 func ShowCustomerMenu() {
-	fmt.Println("\n1 -> Beli")
+	fmt.Println("-------------")
+	fmt.Println("Customer Menu")
+	fmt.Println("-------------")
+
+	fmt.Println("1 -> Beli")
 	fmt.Println("2 -> Rental Pakaian")
 	fmt.Println("3 -> Pesanan")
 	fmt.Println("4 -> Profile")
-	fmt.Println("5 -> Back to Main Menu\n")
+	fmt.Println("5 -> Back to Main Menu")
+	fmt.Println("")
 }
 
 func ShowAdminMenu() {
+	fmt.Println("----------")
+	fmt.Println("Admin Menu")
+	fmt.Println("----------")
+
 	fmt.Println("1 -> Produk")
 	fmt.Println("2 -> Report")
-	fmt.Println("3 -> Back to Main Menu\n")
+	fmt.Println("3 -> Back to Main Menu")
+	fmt.Println("")
 }
 
 func ShowAdminProdukMenu() {
+	fmt.Println("-------------")
+	fmt.Println("Products Menu")
+	fmt.Println("-------------")
+
 	fmt.Println("1 -> Add Produk")
 	fmt.Println("2 -> Delete Produk")
 	fmt.Println("3 -> Update Produk")
-	fmt.Println("4 -> Back\n")
+	fmt.Println("4 -> Back")
+	fmt.Println("")
 }
 
 func ShowAdminReportMenu() {
+	fmt.Println("------------")
+	fmt.Println("Reports Menu")
+	fmt.Println("------------")
+
 	fmt.Println("1 -> User Report")
 	fmt.Println("2 -> Order Report")
-	fmt.Println("3 -> Stock Report")
-	fmt.Println("4 -> Back\n")
+	fmt.Println("3 -> Back")
+	fmt.Println("")
 }
-
 
 func ShowProfileMenu() {
+	fmt.Println("------------")
+	fmt.Println("Profile Menu")
+	fmt.Println("------------")
+
 	fmt.Println("1 -> Show Profile")
 	fmt.Println("2 -> Edit Profile")
-	fmt.Println("3 -> Back\n")
+	fmt.Println("3 -> Back")
+	fmt.Println("")
 }
 
+func ShowAdminAddProductMenu() {
+	fmt.Println("1 -> Clothes")
+	fmt.Println("2 -> Rents")
+	fmt.Println("3 -> Back\n")
+}
 
 func PromptChoice(prompt string) int {
 	input, err := promptline(prompt)
@@ -120,7 +153,6 @@ func Login(db *sql.DB) (*entity.Customer, error) {
 
 	return existingCustomer, nil
 }
-
 
 func ShowProfile(db *sql.DB, customer *entity.Customer) error {
 	var err error
@@ -251,4 +283,3 @@ func UpdateProfile(db *sql.DB, customer *entity.Customer) (*entity.Customer, err
 
 	return customer, nil
 }
-

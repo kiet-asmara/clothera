@@ -5,10 +5,10 @@ import (
 	"fmt"
 )
 
-var Categories []string // Global variable to store categories
+var Categories []string
 
 func ListCategory(db *sql.DB) {
-	query := "SELECT DISTINCT ClothesCategory FROM clothes"
+	query := "SELECT DISTINCT ClothesCategory FROM Clothes"
 	rows, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Error querying the database:", err)
@@ -17,7 +17,7 @@ func ListCategory(db *sql.DB) {
 	defer rows.Close()
 
 	var category string
-	Categories = nil // Reset Categories slice before populating it again
+	Categories = nil
 
 	fmt.Println("\n---Clothing Categories---")
 	num := 1
@@ -41,7 +41,7 @@ func ListCategory(db *sql.DB) {
 }
 
 func DisplayClothesByCategory(db *sql.DB, selectedCategory string) []string {
-	query := "SELECT ClothesName FROM clothes WHERE ClothesCategory = ?"
+	query := "SELECT ClothesName FROM Clothes WHERE ClothesCategory = ?"
 	rows, err := db.Query(query, selectedCategory)
 	if err != nil {
 		fmt.Println("Error querying the database:", err)

@@ -7,3 +7,9 @@ type Clothes struct {
 	ClothesPrice    float64
 	ClothesStock    int
 }
+
+type RevenueByClothes struct {
+	Name         string
+	Quantity     int
+	TotalRevenue float64
+}

@@ -8,3 +8,9 @@ type Rent struct {
 	StartDate string
 	EndDate   string
 }
+
+type ListRent struct {
+	Name      string
+	Quantity  int
+	RentPrice float64
+}

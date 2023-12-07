@@ -16,7 +16,7 @@ func Rent(db *sql.DB, orderID int) (float64, error) {
 	} else if mssg != "" {
 		fmt.Println(mssg)
 		fmt.Println("")
-		return 0, nil
+		return 1, nil
 	}
 
 	// reduce stock
@@ -25,14 +25,14 @@ func Rent(db *sql.DB, orderID int) (float64, error) {
 		return 0, fmt.Errorf("Rent: %w", err)
 	}
 
-	// insert data
-	err = RentInsert(db, rentDetail)
+	// calculate price
+	price, err := RentPrice(db, rentDetail)
 	if err != nil {
 		return 0, fmt.Errorf("Rent: %w", err)
 	}
 
-	// calculate price
-	price, err := RentPrice(db, rentDetail)
+	// insert data
+	err = RentInsert(db, rentDetail, price)
 	if err != nil {
 		return 0, fmt.Errorf("Rent: %w", err)
 	}
@@ -45,9 +45,9 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 	// get input
 	var costumeID, quantity int
 
-	fmt.Println("Choose costume ID:")
+	fmt.Print("Choose costume ID:\n")
 	fmt.Scan(&costumeID)
-	fmt.Println("How many costumes:")
+	fmt.Print("How many costumes:\n")
 	fmt.Scan(&quantity)
 
 	// check stock
@@ -63,16 +63,18 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 
 	var start, end string
 
+	fmt.Println("")
 	fmt.Println("Insert rental date (format: 2023-05-09).")
 	fmt.Println("Start:")
 	fmt.Scan(&start)
 	fmt.Println("End:")
 	fmt.Scan(&end)
+	fmt.Println("")
 
 	// check date
 	days := DaysBetween(start, end)
 	if days == 0 {
-		return entity.Rent{}, "", fmt.Errorf("rentMenu: %w", err)
+		return entity.Rent{}, " ", nil
 	}
 
 	rental := entity.Rent{
@@ -86,16 +88,15 @@ func RentInput(db *sql.DB, orderID int) (entity.Rent, string, error) {
 	return rental, "", nil
 }
 
-func RentInsert(db *sql.DB, rent entity.Rent) error {
-	query := `INSERT INTO rents (orderid,costumeid,quantity,startdate,enddate) VALUES
-	(?,?,?,?,?)`
+func RentInsert(db *sql.DB, rent entity.Rent, price float64) error {
+	query := `INSERT INTO rents (orderid,costumeid,quantity,startdate,enddate,RentPrice) VALUES
+	(?,?,?,?,?,?)`
 
-	_, err := db.Exec(query, rent.OrderID, rent.CostumeID, rent.Quantity, rent.StartDate, rent.EndDate)
+	_, err := db.Exec(query, rent.OrderID, rent.CostumeID, rent.Quantity, rent.StartDate, rent.EndDate, price)
 	if err != nil {
 		return fmt.Errorf("RentInsert: %w", err)
 	}
 
-	fmt.Println("Rental order created")
 	return nil
 }
 
@@ -202,6 +203,5 @@ func ReduceStock(db *sql.DB, costumeID int, quantity int) error {
 		return fmt.Errorf("ReduceStock: %w", err)
 	}
 
-	fmt.Println("Stock reduced")
 	return nil
 }
