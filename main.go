@@ -107,11 +107,7 @@ func main() {
 											log.Fatal(err)
 										}
 
-										fmt.Print("Enter the quantity: ")
-										var quantity int
-										fmt.Scan(&quantity)
-
-										err = handler.AddClothes(db, *selectedClothes, *customer, orderID, quantity)
+										quantity, err := handler.AddClothes(db, *selectedClothes, *customer, orderID)
 										if err != nil {
 											log.Fatal(err)
 										}
@@ -240,9 +236,77 @@ func main() {
 
 							switch productChoice {
 							case 1:
-								fmt.Println("Add Produk")
+								var addProdukAdmin int
+
+								exit3 := false
+
+								for !exit3 {
+									cli.ShowAdminAddProductMenu()
+									fmt.Print("Choice: ")
+									fmt.Scan(&addProdukAdmin)
+
+									switch addProdukAdmin {
+									case 1:
+										categories := handler.FetchAllCategoriesFromDatabase(db)
+										handler.PrintCategoriesClothes(categories)
+
+										selectedCategory := handler.GetSelectedCategoryFromUser(categories)
+
+										newProductClothes := handler.GetProductDetailsFromAdmin(selectedCategory)
+
+										err := handler.InsertProductIntoDatabase(db, newProductClothes)
+										if err != nil {
+											fmt.Println("Error adding product:", err)
+										} else {
+											fmt.Println("Product added successfully!")
+										}
+									case 2:
+										categories := handler.FetchAllCategoriesFromDatabaseCostumes(db)
+										handler.PrintCategoriesCostumes(categories)
+
+										selectedCategory := handler.GetSelectedCategoryFromUserCostumes(categories)
+
+										newProductCostumes := handler.GetProductDetailsFromAdminCostumes(selectedCategory)
+
+										err := handler.InsertProductIntoDatabaseCostumes(db, newProductCostumes)
+										if err != nil {
+											fmt.Println("Error adding product:", err)
+										} else {
+											fmt.Println("Product added successfully!")
+										}
+									case 3:
+										exit3 = true
+									default:
+										fmt.Println("Invalid choice")
+									}
+								}
+
 							case 2:
-								fmt.Println("Delete Produk")
+								var addProdukAdmin int
+								exit3 := false
+
+								for !exit3 {
+									cli.ShowAdminAddProductMenu()
+									fmt.Print("Choice: ")
+									fmt.Scan(&addProdukAdmin)
+
+									switch addProdukAdmin {
+									case 1:
+										categories := handler.FetchAllCategoriesFromDatabase(db)
+										fmt.Println("Available Categories:", categories)
+										handler.ShowProductsByCategory(db)
+										handler.DeleteProduct(db)
+									case 2:
+										categories := handler.FetchAllCategoriesFromDatabaseCostumes(db)
+										fmt.Println("Available Categories:", categories)
+										handler.ShowProductsByCategoryCostumes(db)
+										handler.DeleteProductCostumes(db)
+									case 3:
+										exit3 = true
+									default:
+										fmt.Println("Invalid choice")
+									}
+								}
 							case 3:
 								fmt.Println("Update Produk")
 							case 4:

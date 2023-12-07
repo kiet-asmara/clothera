@@ -87,6 +87,12 @@ func ShowProfileMenu() {
 	fmt.Println("")
 }
 
+func ShowAdminAddProductMenu() {
+	fmt.Println("1 -> Clothes")
+	fmt.Println("2 -> Rents")
+	fmt.Println("3 -> Back\n")
+}
+
 func PromptChoice(prompt string) int {
 	input, err := promptline(prompt)
 	if err != nil {
