@@ -87,17 +87,19 @@ func ShowProfileMenu() {
 	fmt.Println("")
 }
 
+func ShowAdminUpdateProductMenu() {
+  fmt.Println("1 -> Clothes")
+	fmt.Println("2 -> Rents")
+	fmt.Println("3 -> Back\n")
+
+}
+
 func ShowAdminAddProductMenu() {
 	fmt.Println("1 -> Clothes")
 	fmt.Println("2 -> Rents")
 	fmt.Println("3 -> Back\n")
 }
 
-func ShowAdminUpdateProductMenu() {
-	fmt.Println("1 -> Clothes")
-	fmt.Println("2 -> Rents")
-	fmt.Println("3 -> Back\n")
-}
 
 func ShowAdminUpdateDetailMenu() {
 	fmt.Println("1 -> List")
@@ -111,6 +113,8 @@ func ShowAdminProductCategoriesMenu(categories []string) {
 	}
 	fmt.Println()
 }
+
+
 
 func PromptChoice(prompt string) int {
 	input, err := promptline(prompt)
@@ -514,3 +518,4 @@ func HandleUpdateProductCostume(db *sql.DB, choice int, category []string) error
 
 	return nil
 }
+

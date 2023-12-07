@@ -17,6 +17,8 @@ func ShowProductsByCategoryCostumes(db *sql.DB) {
 
 	// Gunakan db.Query untuk mendapatkan data dari database
 	rows, err := db.Query("SELECT * FROM costumes WHERE CostumeCategory = ?", categoryToDisplay)
+
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,6 +66,7 @@ func DeleteProductCostumes(db *sql.DB) {
 
 	// Gunakan db.Exec untuk menghapus data dari database jika tidak ada penjualan terkait
 	result, err := db.Exec("DELETE FROM costumes WHERE CostumeID = ?", idToDelete)
+
 	if err != nil {
 		log.Fatal(err)
 	}

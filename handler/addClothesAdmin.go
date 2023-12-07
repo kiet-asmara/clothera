@@ -9,6 +9,7 @@ import (
 
 func FetchAllCategoriesFromDatabase(db *sql.DB) []string {
 	rows, err := db.Query("SELECT DISTINCT ClothesCategory FROM clothes")
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,6 +52,7 @@ func GetProductDetailsFromAdmin(category string) entity.Clothes {
 
 func InsertProductIntoDatabase(db *sql.DB, clothes entity.Clothes) error {
 	_, err := db.Exec("INSERT INTO clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES (?, ?, ?, ?)",
+
 		clothes.ClothesName, clothes.ClothesCategory, clothes.ClothesPrice, clothes.ClothesStock)
 	return err
 }

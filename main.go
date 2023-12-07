@@ -31,18 +31,14 @@ func main() {
 		switch choiceMainMenu {
 		case 1:
 
-			// if nil == customer {
-			// 	customer, err = cli.Login(db)
-			// 	if err != nil {
-			// 		fmt.Printf("Sorry your crendential is not valid. Please try again!\n\n")
-			// 		continue
-			// 	}
+			if nil == customer {
+				customer, err = cli.Login(db)
+				if err != nil {
+					fmt.Printf("Sorry your crendential is not valid. Please try again!\n\n")
+					continue
+				}
 
-			// 	fmt.Printf("\n|--Login Success--|\n\n\n")
-			// }
-
-			customer = &entity.Customer{
-				CustomerType: entity.Admin,
+				fmt.Printf("\n|--Login Success--|\n\n\n")
 			}
 
 			exit2 := false
@@ -297,12 +293,12 @@ func main() {
 									switch addProdukAdmin {
 									case 1:
 										categories := handler.FetchAllCategoriesFromDatabase(db)
-										fmt.Println("Available Categories:", categories)
+										handler.PrintCategoriesClothes(categories)
 										handler.ShowProductsByCategory(db)
 										handler.DeleteProduct(db)
 									case 2:
 										categories := handler.FetchAllCategoriesFromDatabaseCostumes(db)
-										fmt.Println("Available Categories:", categories)
+										handler.PrintCategoriesCostumes(categories)
 										handler.ShowProductsByCategoryCostumes(db)
 										handler.DeleteProductCostumes(db)
 									case 3:
@@ -445,7 +441,7 @@ func main() {
 			goto RG_OK
 
 		case 3:
-			fmt.Println("Thank you for ordering")
+			fmt.Println("Thank you for ordering!")
 			exitMainMenu = true
 		default:
 			fmt.Println("Invalid choice")
