@@ -34,7 +34,7 @@ CREATE TABLE `Orders` (
   `OrderID` INT PRIMARY KEY AUTO_INCREMENT,
   `CustomerID` INT NOT NULL,
   `OrderDate` DATE NOT NULL,
-  totalPrice INT CHECK(totalPrice >= 0)
+  TotalPrice INT CHECK(TotalPrice >= 0)
 );
 
 CREATE TABLE `Sales` (
