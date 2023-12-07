@@ -9,6 +9,10 @@ import (
 
 func FetchAllCategoriesFromDatabaseCostumes(db *sql.DB) []string {
 	rows, err := db.Query("SELECT DISTINCT CostumeCategory FROM Costumes")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	defer rows.Close()
 	if err != nil {
 		log.Fatal(err)
