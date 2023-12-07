@@ -63,7 +63,10 @@ func InsertProductIntoDatabase(db *sql.DB, clothes entity.Clothes) error {
 	_, err := db.Exec("INSERT INTO Clothes (ClothesName, ClothesCategory, ClothesPrice, ClothesStock) VALUES (?, ?, ?, ?)",
 
 		clothes.ClothesName, clothes.ClothesCategory, clothes.ClothesPrice, clothes.ClothesStock)
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func PrintCategoriesClothes(categories []string) {
