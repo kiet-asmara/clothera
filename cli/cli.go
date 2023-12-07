@@ -123,6 +123,7 @@ func ShowAdminProductCategoriesMenu(categories []string, product entity.Product)
 		fmt.Printf("%-2d - %-10s\n", idx+1, ctgr)
 	}
 	fmt.Printf("%-2d - %-10s\n", len(categories)+1, "back")
+	fmt.Println()
 }
 
 func PromptChoice(prompt string) int {
@@ -167,7 +168,7 @@ func Register(db *sql.DB) (*entity.Customer, error) {
 }
 
 func Login(db *sql.DB) (*entity.Customer, error) {
-	var customer = &entity.Customer{CustomerType: entity.User}
+	var customer = &entity.Customer{}
 	v := validator.New()
 
 	customer.CustomerEmail = inputEmail(v, "email")
@@ -322,6 +323,7 @@ func HandleUpdateProductClothes(db *sql.DB, choice int, category []string) error
 	for !exit {
 		ShowAdminUpdateDetailMenu()
 		choicedetail := PromptChoice("Choice")
+		fmt.Println()
 
 		clothes, err := handler.GetAllClothesByCategory(db, category[choice-1])
 		if err != nil {
@@ -428,6 +430,7 @@ func HandleUpdateProductCostume(db *sql.DB, choice int, category []string) error
 	for !exit {
 		ShowAdminUpdateDetailMenu()
 		choicedetail := PromptChoice("Choice")
+		fmt.Println()
 
 		costumes, err := handler.GetAllCostumeByCategory(db, category[choice-1])
 		if err != nil {
