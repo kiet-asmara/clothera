@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestGetSelectedCategoryFromUserValidCategory(t *testing.T) {
+func TestGetSelectedCategoryFromUserCategory(t *testing.T) {
 	input := "Kemeja\n"
 
 	simulateUserInput(input, func() {

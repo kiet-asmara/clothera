@@ -28,10 +28,19 @@ func FetchAllCategoriesFromDatabaseCostumes(db *sql.DB) []string {
 }
 
 func GetSelectedCategoryFromUserCostumes(categories []string) string {
-	var selectedCategory string
-	fmt.Print("Select Category (Type category name): ")
-	fmt.Scan(&selectedCategory)
-	return selectedCategory
+	for {
+		var selectedCategory string
+		fmt.Print("Select Category (Type category name): ")
+		fmt.Scan(&selectedCategory)
+
+		for _, validCategory := range categories {
+			if selectedCategory == validCategory {
+				return selectedCategory
+			}
+		}
+
+		fmt.Printf("Invalid category. Please select a valid category from %v.\n", categories)
+	}
 }
 
 func GetProductDetailsFromAdminCostumes(category string) entity.Costume {
