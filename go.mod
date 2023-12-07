@@ -4,7 +4,6 @@ go 1.21.4
 
 require (
 	github.com/go-sql-driver/mysql v1.7.1
-
 	github.com/jedib0t/go-pretty v4.3.0+incompatible
 	golang.org/x/crypto v0.16.0
 )
@@ -20,6 +19,4 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	go.mongodb.org/mongo-driver v1.11.3 // indirect
 	golang.org/x/sys v0.15.0 // indirect
-	golang.org/x/crypto v0.16.0
 )
-
