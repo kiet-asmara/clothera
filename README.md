@@ -1,8 +1,8 @@
 # Clothera
----
-<img align="right" width="150px" src="/images/clothera-logo.png">
+<img align="right" width="250px" src="/images/clothera-logo.png">
 
 Clothera is an E-commerce CLI app for a clothing store.
+
 
 Made with Golang and MySQL
 
@@ -11,6 +11,7 @@ Made with Golang and MySQL
 - A user system with encrypted passwords (bcrypt) and profile editing.
 - An admin menu with CRUD operations and sales reports.
 
+---
 ## User Flow
 <img src="/images/clothera-flowchart.png">
 
