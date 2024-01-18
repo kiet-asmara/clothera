@@ -15,8 +15,8 @@ Made with Golang and MySQL
 ## User Flow
 <img src="/images/clothera-flowchart.png">
 
+## App Demo
+<img src="/images/clothera-demo.gif">
+
 ## ERD
 <img src="/images/clothera-erd.png">
-
-## App Demo
->add later
