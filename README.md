@@ -12,11 +12,11 @@ Made with Golang and MySQL
 - An admin menu with CRUD operations and sales reports.
 
 ---
-## User Flow
-<img src="/images/clothera-flowchart.png">
-
 ## App Demo
 <img src="/images/clothera-demo.gif">
+
+## User Flow
+<img src="/images/clothera-flowchart.png">
 
 ## ERD
 <img src="/images/clothera-erd.png">
